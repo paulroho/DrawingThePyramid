@@ -1,0 +1,16 @@
+{
+  "name": "drawingthepyramid",
+  "version": "1.0.0",
+  "description": "draw a testautomation pyramid",
+  "main": "app.js",
+  "dependencies": {
+    "esm": "^3.2.25",
+    "fast-check": "^1.23.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Paul Rohorzka",
+  "license": "ISC"
+}
