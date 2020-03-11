@@ -10,24 +10,28 @@
     <div>
         <label for="n1">Number of integrated tests:</label>
         <input type="number" id="n1" min="0" accesskey="I" value="71" autofocus />
-        <br/>
+        <br />
         <label for="n2">Number of unit tests:</label>
         <input type="number" id="n2" min="0" accesskey="U" value="380" />
-        <br/>
-        <button accesskey="D" onclick="alert('TODO');">Draw</button>
     </div>
 
     <svg width="500" height="500" class="pyramid">
-        <polygon points="250,50 150,250 350,250" class="triangle" />
-        <!-- <rect x="150" y="50" width="200" height="200" fill="transparent" stroke="black" stroke-dasharray="10 5" /> -->
-        <text x="250" y="200" text-anchor="middle" class="test-count">71</text>
-        <text x="250" y="240" text-anchor="middle" class="test-classification">Integrated Tests</text>
+        <g id="part-top">
+            <polygon class="triangle" />
+            <!-- <rect x="150" y="50" width="200" height="200" fill="transparent" stroke="black" stroke-dasharray="10 5" /> -->
+            <text x="250" y="200" text-anchor="middle" class="test-count">-</text>
+            <text x="250" y="240" text-anchor="middle" class="test-classification">Integrated Tests</text>
+        </g>
 
-        <polygon points="150,250 350,250 450,450 50,450" class="trapezoid" />
-        <!-- <rect x="50" y="250" width="400" height="200" fill="transparent" stroke="black" stroke-dasharray="10 5" /> -->
-        <text x="250" y="380" text-anchor="middle" class="test-count">380</text>
-        <text x="250" y="440" text-anchor="middle" class="test-classification">Unit-Tests</text>
+        <g id="part-bottom">
+            <polygon points="150,250 350,250 450,450 50,450" class="trapezoid" />
+            <!-- <rect x="50" y="250" width="400" height="200" fill="transparent" stroke="black" stroke-dasharray="10 5" /> -->
+            <text x="250" y="380" text-anchor="middle" class="test-count">-</text>
+            <text x="250" y="440" text-anchor="middle" class="test-classification">Unit-Tests</text>
+        </g>
     </svg>
+
+    <script src="pyramid.js"></script>
 </body>
 
 </html>
