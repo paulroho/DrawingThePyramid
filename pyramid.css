@@ -1,0 +1,10 @@
+.pyramid {
+    stroke:black;
+    stroke-width: 3px;
+}
+.triangle {
+    fill:lightsalmon;
+}
+.trapezoid {
+    fill:lightseagreen;
+}
