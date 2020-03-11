@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <link href="pyramid.css" rel="stylesheet" />
+    <script type="module" src="app.js"></script>
+    <script type="module" src="pyramid.js"></script>
 </head>
 
 <body>
@@ -17,7 +19,7 @@
 
     <svg width="500" height="500" class="pyramid">
         <g id="part-top">
-            <polygon class="triangle" />
+            <polygon points="250,50 150,250 350,250" class="triangle" />
             <!-- <rect x="150" y="50" width="200" height="200" fill="transparent" stroke="black" stroke-dasharray="10 5" /> -->
             <text x="250" y="200" text-anchor="middle" class="test-count">-</text>
             <text x="250" y="240" text-anchor="middle" class="test-classification">Integrated Tests</text>
@@ -31,7 +33,11 @@
         </g>
     </svg>
 
-    <script src="pyramid.js"></script>
+    <script type="module">
+        import * as app from './app.js'
+
+        app.startup();
+    </script>
 </body>
 
 </html>
