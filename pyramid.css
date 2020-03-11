@@ -1,6 +1,17 @@
 .pyramid {
+    font-family: Arial, Helvetica, sans-serif;
+}
+.pyramid .test-count {
+    font-size: 60px;
+    font-weight: bold;
+}
+.pyramid .test-classification {
+    font-size: 20px;
+}
+.pyramid polygon {
     stroke:black;
-    stroke-width: 3px;
+    stroke-width: 8px;
+    stroke-linejoin: round;
 }
 .triangle {
     fill:lightsalmon;
