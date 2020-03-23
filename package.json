@@ -7,9 +7,13 @@
     "esm": "^3.2.25",
     "fast-check": "^1.23.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.1",
+    "mocha": "^7.1.1"
+  },
   "scripts": {
-    "test": "mocha"
+    "start": "live-server --watch=.",
+    "test": "mocha --watch --colors"
   },
   "author": "Paul Rohorzka",
   "license": "ISC"
