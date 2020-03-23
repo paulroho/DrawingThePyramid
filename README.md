@@ -3,7 +3,7 @@
 This project has two goals:
 
 * Provide an easy way to draw a test automation pyramid with proper proportions.
-* Provide a good example for doing property based testing in JavaScript.
+* Provide a good example for doing property based testing in JavaScript using [fast-check](https://www.npmjs.com/package/fast-check).
 
 
 ## Getting Started
