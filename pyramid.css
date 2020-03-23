@@ -19,3 +19,10 @@ body {
 .trapezoid {
     fill:lightseagreen;
 }
+#r1{
+    /* transform:rotate(20deg); */
+}
+#r2{
+    transform:translate(40px,20px);
+    /* transform:rotate(20deg); */
+}
