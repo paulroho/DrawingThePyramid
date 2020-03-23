@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "description": "draw a testautomation pyramid",
   "main": "app.js",
-  "dependencies": {
-    "esm": "^3.2.25"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "esm": "^3.2.25",
     "fast-check": "^1.23.0",
     "live-server": "^1.2.1",
     "mocha": "^7.1.1"
