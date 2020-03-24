@@ -15,7 +15,6 @@ This project has two goals:
 
 Clone the repository
 
-    $ mkdir DrawingThePyramid
     $ git clone https://github.com/paulroho/DrawingThePyramid.git
     $ cd DrawingThePyramid
 
