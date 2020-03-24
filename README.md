@@ -16,20 +16,16 @@ This project has two goals:
 Clone the repository
 
     $ mkdir DrawingThePyramid
-    $ cd DrawingThePyramid
     $ git clone https://github.com/paulroho/DrawingThePyramid.git
+    $ cd DrawingThePyramid
 
 ### Setup
-
-On a terminal from project root type this command:
 
     $ npm install
 
 This downloads all the npm-packages as stated in project.json.
 
 ### Watch it in the Browser
-
-On a terminal from project root type this command:
 
     $ npm start
 
