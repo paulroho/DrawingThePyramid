@@ -32,6 +32,8 @@ This starts a [life-server](https://www.npmjs.com/package/live-server) and opens
 
 Hint: As you are probably not too much interested in observing the output of the live-server, you might consider running this command from a integrated terminal of your IDE, such as Visual Studio Code.
 
+Refer to [Known Issues - Browser Support](#browser-support).
+
 ## Run the Tests
 
 On a dedicated terminal from project root:
@@ -43,9 +45,18 @@ This starts [mocha](https://www.npmjs.com/package/mocha) with the `--watch` swit
 Hint: You better start this command from a terminal window external to your IDE.
 
 
+## Known Issues
+
+### Browser Support
+While the code works fine with Mozialla Firefox and Google Chrome, Microsoft Edge has some issues loading all assets properly.
+
+Interestingly, if you have the debugger tools open, refreshing the page once or twice usually makes it work in Edge as well.
 
 
 
-### VS Code Hint: Toggle between Code and Terminal
+
+## Miscellaneous Hints
+
+## VS Code: Toggle between Code and Terminal
 
 Use `Ctrl+J` to switch focus between the code window and the current terminal. This creates a new terminal if you currently do not have one open yet. 
