@@ -57,6 +57,6 @@ Interestingly, if you have the debugger tools open, refreshing the page once or 
 
 ## Miscellaneous Hints
 
-## VS Code: Toggle between Code and Terminal
+### VS Code: Toggle between Code and Terminal
 
 Use `Ctrl+J` to switch focus between the code window and the current terminal. This creates a new terminal if you currently do not have one open yet. 
