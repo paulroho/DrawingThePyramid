@@ -1,5 +1,7 @@
 # Drawing The Pyramid
 
+> WORK IN PROGRESS
+
 This project has two goals:
 
 * Provide an easy way to draw a test automation pyramid with proper proportions.
