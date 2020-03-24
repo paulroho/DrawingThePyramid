@@ -1,16 +1,24 @@
 export function getPoints(topCount, bottomCount) {
+    const f = Math.sqrt(topCount / (topCount + bottomCount));
+    const b = 400;
+    const h = 400;
+    const mid = 250;
+
+    const n = h * f;
+    const c = b * f;
+
     // TODO Implement here
     return [
         [
-            { x: 250 + 0*(Math.random()*200-100), y: 50 },
-            { x: 150, y: 250 },
-            { x: 350, y: 250 }
+            { x: mid, y: 50 },
+            { x: mid - c / 2, y: 50 + n },
+            { x: mid + c / 2, y: 50 + n }
         ],
         [
-            { x: 150, y: 250 },
-            { x: 350, y: 250 },
-            { x: 450, y: 450 },
-            { x: 50, y: 450 }
+            { x: mid - c / 2, y: 50 + n },
+            { x: mid + c / 2, y: 50 + n },
+            { x: mid + 200, y: 450 },
+            { x: mid - 200, y: 450 }
         ]
     ];
 }

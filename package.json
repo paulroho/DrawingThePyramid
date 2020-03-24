@@ -5,6 +5,7 @@
   "main": "app.js",
   "dependencies": {},
   "devDependencies": {
+    "chai": "^4.2.0",
     "esm": "^3.2.25",
     "fast-check": "^1.23.0",
     "live-server": "^1.2.1",

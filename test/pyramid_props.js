@@ -1,4 +1,5 @@
 const fc = require('fast-check');
+const should = require('chai').should();
 const esmRequire = require('esm')(module)
 const pyramid = esmRequire('../pyramid.js')
 const { getPoints } = pyramid
@@ -13,6 +14,7 @@ describe('The triangle on top', () => {
         assertTrianglePoints(trianglePoints => {
             const bottomLeft = trianglePoints[1];
             const bottomRight = trianglePoints[2];
+            
             return bottomLeft.y === bottomRight.y;
         });
     });
@@ -21,7 +23,11 @@ describe('The triangle on top', () => {
             const tip = trianglePoints[0];
             const bottomLeft = trianglePoints[1];
             const bottomRight = trianglePoints[2];
-            return tip.x - bottomLeft.x === bottomRight.x - tip.x;
+
+            const leftBase = tip.x - bottomLeft.x;
+            const rightBase = bottomRight.x - tip.x;
+
+            leftBase.should.be.closeTo(rightBase, 1e-6);
         });
     })
 });
@@ -36,6 +42,7 @@ describe('The trapezoid at the base', () => {
         assertTrapezoidPoints(trapezoidPoints => {
             const topLeft = trapezoidPoints[0];
             const topRight = trapezoidPoints[1];
+
             return topLeft.y == topRight.y;
         });
     });
@@ -43,6 +50,7 @@ describe('The trapezoid at the base', () => {
         assertTrapezoidPoints(trapezoidPoints => {
             const bottomRight = trapezoidPoints[2];
             const bottomLeft = trapezoidPoints[3];
+
             return bottomRight.y == bottomLeft.y;
         });
     });
@@ -52,7 +60,11 @@ describe('The trapezoid at the base', () => {
             const topRight = trapezoidPoints[1];
             const bottomRight = trapezoidPoints[2];
             const bottomLeft = trapezoidPoints[3];
-            return topLeft.x - bottomLeft.x == bottomRight.x - topRight.x;
+
+            const leftBase = topLeft.x - bottomLeft.x;
+            const rightBase = bottomRight.x - topRight.x;
+
+            leftBase.should.be.closeTo(rightBase, 1e-6);
         });
     });
 });
@@ -69,7 +81,7 @@ describe('The triangle and the trapezoid', () => {
             const trapezoidTopRight = trapezoidPoints[1];
 
             return pointsAreEqual(triangleBottomLeft, trapezoidTopLeft) &&
-                pointsAreEqual(triangleBottomRight, trapezoidTopRight);
+                   pointsAreEqual(triangleBottomRight, trapezoidTopRight);
         });
     });
     it('should have the same slant', () => {
@@ -79,18 +91,44 @@ describe('The triangle and the trapezoid', () => {
             const triangleBottomRight = trianglePoints[2];
             const triangleHeight = triangleBottomRight.y - triangleTip.y;
             const triangleDeltaX = triangleBottomRight.x - triangleTip.x;
-            // console.log('Triangle: ' + triangleHeight + ', ' + triangleDeltaX + ': ' + triangleHeight/triangleDeltaX);
 
             const trapezoidPoints = points[1];
             const trapezoidTopRight = trapezoidPoints[1];
             const trapezoidBottomRight = trapezoidPoints[2];
             const trapezoidHeight = trapezoidBottomRight.y - trapezoidTopRight.y;
             const trapezoidDeltaX = trapezoidBottomRight.x - trapezoidTopRight.x;
-            // console.log('Trapezoid: ' + trapezoidHeight + ', ' + trapezoidDeltaX + ': ' + trapezoidHeight/trapezoidDeltaX);
 
-            return triangleHeight * trapezoidDeltaX === trapezoidHeight * triangleDeltaX;
-            // return triangleHeight/triangleDeltaX === trapezoidHeight/trapezoidDeltaX;
+            if (trapezoidHeight > 0) {
+                const triangleSlant = triangleHeight / triangleDeltaX;
+                const trapezoidSlant = trapezoidHeight / trapezoidDeltaX;
+                trapezoidSlant.should.be.closeTo(triangleSlant, 1e-5);
+            }
         });
+    });
+    it('should have areas reflecting the two numbers given', () => {
+        return fc.assert(
+            fc.property(
+                fc.nat().map(n => n + 1), fc.nat(), (n1, n2) => {
+                    const points = getPoints(n1, n2);
+
+                    const trianglePoints = points[0];
+                    const triangleArea = calculatePolygonArea(trianglePoints);
+
+                    const trapezoidPoints = points[1];
+                    const trapezoidArea = calculatePolygonArea(trapezoidPoints);
+
+                    const numberRatio = n2 / n1;
+                    const areaRatio = trapezoidArea / triangleArea; 
+
+                    if (numberRatio === 0) {
+                        areaRatio.should.be.equal(0);
+                    }
+                    else {
+                        (areaRatio/numberRatio).should.be.closeTo(1, 1e-6);
+                    }
+                }
+            )
+        );
     });
 });
 
@@ -98,10 +136,10 @@ const pointsAreEqual = (p1, p2) => {
     return p1.x === p2.x && p1.y === p2.y;
 };
 
-const assertPyramidPoints = (assertion) => {
+const assertPyramidPoints = assertion => {
     return fc.assert(
         fc.property(
-            fc.integer(), fc.integer(), (n1, n2) => {
+            fc.nat().map(n => n + 1), fc.nat(), (n1, n2) => {
                 const points = getPoints(n1, n2);
                 return assertion(points);
             }
@@ -109,14 +147,26 @@ const assertPyramidPoints = (assertion) => {
     );
 };
 
-const assertTrianglePoints = (assertion) => {
-    return assertPyramidPoints(points => {
-        return assertion(points[0]);
-    });
+const assertTrianglePoints = assertion => {
+    return assertPyramidPoints(points => assertion(points[0]));
 };
 
-const assertTrapezoidPoints = (assertion) => {
-    return assertPyramidPoints(points => {
-        return assertion(points[1]);
-    });
+const assertTrapezoidPoints = assertion => {
+    return assertPyramidPoints(points => assertion(points[1]));
+};
+
+const calculatePolygonArea = vertices => {
+    var total = 0;
+
+    for (var i = 0, l = vertices.length; i < l; i++) {
+        var addX = vertices[i].x;
+        var addY = vertices[i == vertices.length - 1 ? 0 : i + 1].y;
+        var subX = vertices[i == vertices.length - 1 ? 0 : i + 1].x;
+        var subY = vertices[i].y;
+
+        total += (addX * addY * 0.5);
+        total -= (subX * subY * 0.5);
+    }
+
+    return Math.abs(total);
 };
