@@ -6,7 +6,6 @@ export function getPoints(topCount, bottomCount) {
     const n = h * f;
     const c = b * f;
 
-    // TODO Implement here
     return [
         [
             { x: 0, y: 50 },
