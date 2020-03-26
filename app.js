@@ -5,24 +5,25 @@ export function startup() {
     redraw();
 }
 
-const n1Text = document.getElementById('n1');
-const n2Text = document.getElementById('n2');
+const count1Text = document.getElementById('number-1');
+const count2Text = document.getElementById('number-2');
 
 const topPart = document.getElementById('part-top');
 const topCountText = topPart.getElementsByClassName('test-count')[0];
 const topShape = topPart.getElementsByTagName('polygon')[0];
+
 const bottomPart = document.getElementById('part-bottom');
 const bottomCountText = bottomPart.getElementsByClassName('test-count')[0];
 const bottomShape = bottomPart.getElementsByTagName('polygon')[0];
 
 function wire() {
-    n1Text.onchange = redraw;
-    n2Text.onchange = redraw;
+    count1Text.onchange = redraw;
+    count2Text.onchange = redraw;
 }
 
 function redraw() {
-    const topCount = parseInt(n1Text.value);
-    const bottomCount = parseInt(n2Text.value);
+    const topCount = parseInt(count1Text.value);
+    const bottomCount = parseInt(count2Text.value);
 
     updatePyramid(topCount, bottomCount);
 }

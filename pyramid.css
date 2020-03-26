@@ -1,6 +1,25 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
 }
+
+input {
+    font: inherit;
+}
+
+.form {
+    display: grid;
+    grid-template-columns: 90px auto;
+    gap: 10px;
+}
+.form label {
+    font-weight: bold;
+}
+.form input {
+    padding: .4em;
+    border:1px solid lightgray;
+    border-radius: 3px;
+}
+
 .pyramid .test-count {
     font-size: 60px;
     font-weight: bold;

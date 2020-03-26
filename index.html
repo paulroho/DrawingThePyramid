@@ -9,12 +9,15 @@
 </head>
 
 <body>
-    <div>
-        <label for="n1">Number of integrated tests:</label>
-        <input type="number" id="n1" min="0" accesskey="I" value="25" autofocus />
-        <br />
-        <label for="n2">Number of unit tests:</label>
-        <input type="number" id="n2" min="0" accesskey="U" value="75" />
+    <div class="form">
+        <label for="">Number</label>
+        <label for="">Type</label>
+
+        <input type="number" id="number-1" min="0" dir="rtl" accesskey="1" value="25" autofocus />
+        <input type="text" id="classification-1" value="Integrated Tests" />
+        
+        <input type="number" id="number-2" min="0" dir="rtl" accesskey="2" value="75" />
+        <input type="text" id="classification-2" value="Unit Tests" />
     </div>
 
     <svg width="500" height="500" class="pyramid" viewbox="-250 0 500 500" preserveAspectRatio="none">
