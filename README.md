@@ -50,10 +50,9 @@ Hint: You better start this command from a terminal window external to your IDE.
 ## Known Issues
 
 ### Browser Support
-While the code works fine with Mozialla Firefox and Google Chrome, Microsoft Edge has some issues loading all assets properly.
-
-Interestingly, if you have the debugger tools open, refreshing the page once or twice usually makes it work in Edge as well.
-
+* **Firefox on Android** - On Firefox for Android the input box for the numbers are partially covered by the classification input (Issue #1)
+* **Legacy Microsoft Edge** - While the code works fine with Mozialla Firefox and Google Chrome, legacy Microsoft Edge has some issues loading all assets properly.
+    * Interestingly, if you have the debugger tools open, refreshing the page once or twice usually makes it work in Edge as well.
 
 
 
