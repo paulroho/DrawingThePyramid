@@ -160,6 +160,14 @@ const pointsAreEqual = (p1, p2) => {
     return p1.x === p2.x && p1.y === p2.y;
 };
 
+const assertTrianglePoints = assertion => {
+    return assertPyramidPoints((points, inputs) => assertion(points[0], inputs));
+};
+
+const assertTrapezoidPoints = assertion => {
+    return assertPyramidPoints((points, inputs) => assertion(points[1], inputs));
+};
+
 const assertPyramidPoints = assertion => {
     return fc.assert(
         fc.property(
@@ -178,14 +186,6 @@ const assertPyramidPoints = assertion => {
         )
         ,{verbose: true}
     );
-};
-
-const assertTrianglePoints = assertion => {
-    return assertPyramidPoints((points, inputs) => assertion(points[0], inputs));
-};
-
-const assertTrapezoidPoints = assertion => {
-    return assertPyramidPoints((points, inputs) => assertion(points[1], inputs));
 };
 
 const calculatePolygonArea = vertices => {
