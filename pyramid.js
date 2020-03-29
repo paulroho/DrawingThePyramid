@@ -15,8 +15,8 @@ export function getPoints(topCount, bottomCount, options) {
         [
             { x: -c / 2, y: options.top + n },
             { x: +c / 2, y: options.top + n },
-            { x: +200,   y: options.top + 400 },
-            { x: -200,   y: options.top + 400 }
+            { x: +b / 2, y: options.top + h },
+            { x: -b / 2, y: options.top + h }
         ]
     ];
 }
