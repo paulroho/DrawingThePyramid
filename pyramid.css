@@ -6,13 +6,25 @@ input {
     font: inherit;
 }
 
-.form {
+.form .slices {
     display: grid;
     grid-template-columns: 90px auto;
     gap: 10px;
 }
+.form .options {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr 90px 1fr 90px 1fr 90px;
+    /* grid-template-columns: auto auto auto auto auto auto; */
+    gap: 10px;
+}
 .form label {
     font-weight: bold;
+    margin-top:4px;
+    margin-left:10px;
+}
+.form .options label {
+    text-align:right;
 }
 .form input {
     padding: .4em;
