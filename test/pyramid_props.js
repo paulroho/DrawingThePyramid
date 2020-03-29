@@ -30,7 +30,7 @@ describe('The triangle on top', () => {
             leftBase.should.be.closeTo(rightBase, 1e-6);
         });
     });
-    it('should have its tip at the provided top option', () => {
+    it('should have its tip at the provided option "top"', () => {
         assertTrianglePoints((trianglePoints, inputs) => {
             const tip = trianglePoints[0];
 
@@ -127,8 +127,21 @@ describe('The triangle and the trapezoid', () => {
                 areaRatio.should.be.equal(0);
             }
             else {
-                (areaRatio/numberRatio).should.be.closeTo(1, 1e-6);
+                (areaRatio/numberRatio).should.be.closeTo(1, 1e-4);
             }
+        });
+    });
+    it('should have a total vertical extent according to option "height"', () => {
+        assertPyramidPoints((points, inputs) => {
+            const trianglePoints = points[0];
+            const tip = trianglePoints[0];
+
+            const trapezoidPoints = points[1];
+            const bottom = trapezoidPoints[3];
+
+            const height = bottom.y - tip.y;
+            
+            height.should.be.equal(inputs.height);
         });
     });
 });
@@ -143,14 +156,16 @@ const assertPyramidPoints = assertion => {
             fc.nat().map(n => n + 1), 
             fc.nat(), 
             fc.integer(0, 400),
-            (n1, n2, top) => {
-                const options = { top: top };
+            fc.integer(1, 400),
+            (n1, n2, top, height) => {
+                const options = { top, height };
                 const points = getPoints(n1, n2, options);
 
-                const inputs = { n1, n2, top };
+                const inputs = { n1, n2, top, height };
                 return assertion(points, inputs);
             }
         )
+        ,{verbose: true}
     );
 };
 
