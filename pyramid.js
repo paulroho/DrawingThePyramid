@@ -1,4 +1,4 @@
-export function getPoints(topCount, bottomCount) {
+export function getPoints(topCount, bottomCount, options) {
     const f = Math.sqrt(topCount / (topCount + bottomCount));
     const b = 400;
     const h = 400;
@@ -8,15 +8,15 @@ export function getPoints(topCount, bottomCount) {
 
     return [
         [
-            { x: 0, y: 50 },
-            { x: -c / 2, y: 50 + n },
-            { x: +c / 2, y: 50 + n }
+            { x: 0,      y: options.top },
+            { x: -c / 2, y: options.top + n },
+            { x: +c / 2, y: options.top + n }
         ],
         [
-            { x: -c / 2, y: 50 + n },
-            { x: +c / 2, y: 50 + n },
-            { x: +200, y: 450 },
-            { x: -200, y: 450 }
+            { x: -c / 2, y: options.top + n },
+            { x: +c / 2, y: options.top + n },
+            { x: +200,   y: options.top + 400 },
+            { x: -200,   y: options.top + 400 }
         ]
     ];
 }

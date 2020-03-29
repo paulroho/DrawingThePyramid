@@ -29,7 +29,14 @@ describe('The triangle on top', () => {
 
             leftBase.should.be.closeTo(rightBase, 1e-6);
         });
-    })
+    });
+    it('should have its tip at the provided top option', () => {
+        assertTrianglePoints((trianglePoints, options) => {
+            const tip = trianglePoints[0];
+
+            return tip.y === options.top;
+        });
+    });
 });
 
 describe('The trapezoid at the base', () => {
@@ -71,7 +78,7 @@ describe('The trapezoid at the base', () => {
 
 describe('The triangle and the trapezoid', () => {
     it('should be perfectly stacked', () => {
-        assertPyramidPoints(points => {
+        assertPyramidPoints((points, options) => {
             const trianglePoints = points[0];
             const triangleBottomLeft = trianglePoints[1];
             const triangleBottomRight = trianglePoints[2];
@@ -85,7 +92,7 @@ describe('The triangle and the trapezoid', () => {
         });
     });
     it('should have the same slant', () => {
-        assertPyramidPoints(points => {
+        assertPyramidPoints((points, options) => {
             const trianglePoints = points[0];
             const triangleTip = trianglePoints[0];
             const triangleBottomRight = trianglePoints[2];
@@ -108,8 +115,9 @@ describe('The triangle and the trapezoid', () => {
     it('should have areas reflecting the two numbers given', () => {
         return fc.assert(
             fc.property(
-                fc.nat().map(n => n + 1), fc.nat(), (n1, n2) => {
-                    const points = getPoints(n1, n2);
+                fc.nat().map(n => n + 1), fc.nat(), fc.integer(0, 400), (n1, n2, top) => {
+                    const options = {top};
+                    const points = getPoints(n1, n2, options);
 
                     const trianglePoints = points[0];
                     const triangleArea = calculatePolygonArea(trianglePoints);
@@ -139,20 +147,24 @@ const pointsAreEqual = (p1, p2) => {
 const assertPyramidPoints = assertion => {
     return fc.assert(
         fc.property(
-            fc.nat().map(n => n + 1), fc.nat(), (n1, n2) => {
-                const points = getPoints(n1, n2);
-                return assertion(points);
+            fc.nat().map(n => n + 1), 
+            fc.nat(), 
+            fc.integer(0, 400),
+            (n1, n2, top) => {
+                const options = { top: top};
+                const points = getPoints(n1, n2, options);
+                return assertion(points, options);
             }
         )
     );
 };
 
 const assertTrianglePoints = assertion => {
-    return assertPyramidPoints(points => assertion(points[0]));
+    return assertPyramidPoints((points, options) => assertion(points[0], options));
 };
 
 const assertTrapezoidPoints = assertion => {
-    return assertPyramidPoints(points => assertion(points[1]));
+    return assertPyramidPoints((points, options) => assertion(points[1], options));
 };
 
 const calculatePolygonArea = vertices => {
