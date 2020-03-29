@@ -31,10 +31,10 @@ describe('The triangle on top', () => {
         });
     });
     it('should have its tip at the provided top option', () => {
-        assertTrianglePoints((trianglePoints, options) => {
+        assertTrianglePoints((trianglePoints, inputs) => {
             const tip = trianglePoints[0];
 
-            return tip.y === options.top;
+            return tip.y === inputs.top;
         });
     });
 });
@@ -78,7 +78,7 @@ describe('The trapezoid at the base', () => {
 
 describe('The triangle and the trapezoid', () => {
     it('should be perfectly stacked', () => {
-        assertPyramidPoints((points, options) => {
+        assertPyramidPoints(points => {
             const trianglePoints = points[0];
             const triangleBottomLeft = trianglePoints[1];
             const triangleBottomRight = trianglePoints[2];
@@ -92,7 +92,7 @@ describe('The triangle and the trapezoid', () => {
         });
     });
     it('should have the same slant', () => {
-        assertPyramidPoints((points, options) => {
+        assertPyramidPoints(points => {
             const trianglePoints = points[0];
             const triangleTip = trianglePoints[0];
             const triangleBottomRight = trianglePoints[2];
@@ -113,30 +113,23 @@ describe('The triangle and the trapezoid', () => {
         });
     });
     it('should have areas reflecting the two numbers given', () => {
-        return fc.assert(
-            fc.property(
-                fc.nat().map(n => n + 1), fc.nat(), fc.integer(0, 400), (n1, n2, top) => {
-                    const options = {top};
-                    const points = getPoints(n1, n2, options);
+        assertPyramidPoints((points, inputs) => {
+            const trianglePoints = points[0];
+            const triangleArea = calculatePolygonArea(trianglePoints);
 
-                    const trianglePoints = points[0];
-                    const triangleArea = calculatePolygonArea(trianglePoints);
+            const trapezoidPoints = points[1];
+            const trapezoidArea = calculatePolygonArea(trapezoidPoints);
 
-                    const trapezoidPoints = points[1];
-                    const trapezoidArea = calculatePolygonArea(trapezoidPoints);
+            const numberRatio = inputs.n2 / inputs.n1;
+            const areaRatio = trapezoidArea / triangleArea; 
 
-                    const numberRatio = n2 / n1;
-                    const areaRatio = trapezoidArea / triangleArea; 
-
-                    if (numberRatio === 0) {
-                        areaRatio.should.be.equal(0);
-                    }
-                    else {
-                        (areaRatio/numberRatio).should.be.closeTo(1, 1e-6);
-                    }
-                }
-            )
-        );
+            if (numberRatio === 0) {
+                areaRatio.should.be.equal(0);
+            }
+            else {
+                (areaRatio/numberRatio).should.be.closeTo(1, 1e-6);
+            }
+        });
     });
 });
 
@@ -151,20 +144,22 @@ const assertPyramidPoints = assertion => {
             fc.nat(), 
             fc.integer(0, 400),
             (n1, n2, top) => {
-                const options = { top: top};
+                const options = { top: top };
                 const points = getPoints(n1, n2, options);
-                return assertion(points, options);
+
+                const inputs = { n1, n2, top };
+                return assertion(points, inputs);
             }
         )
     );
 };
 
 const assertTrianglePoints = assertion => {
-    return assertPyramidPoints((points, options) => assertion(points[0], options));
+    return assertPyramidPoints((points, inputs) => assertion(points[0], inputs));
 };
 
 const assertTrapezoidPoints = assertion => {
-    return assertPyramidPoints((points, options) => assertion(points[1], options));
+    return assertPyramidPoints((points, inputs) => assertion(points[1], inputs));
 };
 
 const calculatePolygonArea = vertices => {
