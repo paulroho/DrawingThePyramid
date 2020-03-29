@@ -2,7 +2,7 @@ export function getPoints(topCount, bottomCount, options) {
     const f = Math.sqrt(topCount / (topCount + bottomCount));
 
     const top = options.top;
-    const width = 400;
+    const width = options.width;
     const height = options.height;
 
     const n = height * f;

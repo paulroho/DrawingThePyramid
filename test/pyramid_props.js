@@ -74,6 +74,16 @@ describe('The trapezoid at the base', () => {
             leftBase.should.be.closeTo(rightBase, 1e-6);
         });
     });
+    it('should have a base with a width according to option "width"', () => {
+        assertTrapezoidPoints((trapezoidPoints, inputs) => {
+            const bottomRight = trapezoidPoints[2];
+            const bottomLeft = trapezoidPoints[3];
+
+            const width = bottomRight.x - bottomLeft.x;
+
+            width.should.be.equal(inputs.width);
+        });
+    });
 });
 
 describe('The triangle and the trapezoid', () => {
@@ -108,7 +118,7 @@ describe('The triangle and the trapezoid', () => {
             if (trapezoidHeight > 0) {
                 const triangleSlant = triangleHeight / triangleDeltaX;
                 const trapezoidSlant = trapezoidHeight / trapezoidDeltaX;
-                trapezoidSlant.should.be.closeTo(triangleSlant, 1e-5);
+                trapezoidSlant.should.be.closeTo(triangleSlant, 2e-4);
             }
         });
     });
@@ -157,11 +167,12 @@ const assertPyramidPoints = assertion => {
             fc.nat(), 
             fc.integer(0, 400),
             fc.integer(1, 400),
-            (n1, n2, top, height) => {
-                const options = { top, height };
+            fc.integer(1, 400),
+            (n1, n2, top, height, width) => {
+                const options = { top, height, width };
                 const points = getPoints(n1, n2, options);
 
-                const inputs = { n1, n2, top, height };
+                const inputs = { n1, n2, top, height, width };
                 return assertion(points, inputs);
             }
         )

@@ -44,7 +44,7 @@ function redraw() {
 }
 
 function updatePyramid(topCount, bottomCount) {
-    const options = { top:50, height:400 };
+    const options = { top:50, height:400, width:400 };
     const points = pyramid.getPoints(topCount, bottomCount, options);
 
     setPoints(topShape, points[0]);
