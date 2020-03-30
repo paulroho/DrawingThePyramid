@@ -59,7 +59,20 @@ function updatePyramid(topCount, bottomCount, options) {
     const points = pyramid.getPoints(topCount, bottomCount, options);
 
     setPoints(topShape, points[0]);
+    const triangleTop = points[0][0].y;
+    const triangleBottom = points[0][1].y;
+    const triangleHeight = triangleBottom - triangleTop;
+    const triangleTextRange = triangleHeight - 40 - 60;
+    topCountText.setAttribute('y', triangleTop + 60 + .8 * triangleTextRange);
+    topClassificationText.setAttribute('y', triangleBottom - 10);
+
     setPoints(bottomShape, points[1]);
+    const trapezoidTop = points[1][0].y;
+    const trapezoidBottom = points[1][2].y;
+    const trapezoidHeight = trapezoidBottom - trapezoidTop;
+    const trapezoidTextRange = trapezoidHeight - 40 - 60;
+    bottomCountText.setAttribute('y', trapezoidTop + 60 + .5 * (trapezoidTextRange - 0));
+    bottomClassificationText.setAttribute('y', trapezoidBottom - 10);
 }
 
 function setPoints(polygon, points) {
