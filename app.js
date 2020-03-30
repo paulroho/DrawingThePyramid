@@ -58,21 +58,28 @@ function redraw() {
 function updatePyramid(topCount, bottomCount, options) {
     const points = pyramid.getPoints(topCount, bottomCount, options);
 
-    setPoints(topShape, points[0]);
-    const triangleTop = points[0][0].y;
-    const triangleBottom = points[0][1].y;
-    const triangleHeight = triangleBottom - triangleTop;
-    const triangleTextRange = triangleHeight - 40 - 60;
-    topCountText.setAttribute('y', triangleTop + 60 + .8 * triangleTextRange);
-    topClassificationText.setAttribute('y', triangleBottom - 10);
+    const trianglePoints = points[0];
+    setPoints(topShape, trianglePoints);
+    const triPoss = getTextPositions(trianglePoints[0].y, trianglePoints[1].y, .8);
+    topCountText.setAttribute('y',          triPoss.countY);
+    topClassificationText.setAttribute('y', triPoss.classificationY);
 
-    setPoints(bottomShape, points[1]);
-    const trapezoidTop = points[1][0].y;
-    const trapezoidBottom = points[1][2].y;
-    const trapezoidHeight = trapezoidBottom - trapezoidTop;
-    const trapezoidTextRange = trapezoidHeight - 40 - 60;
-    bottomCountText.setAttribute('y', trapezoidTop + 60 + .5 * (trapezoidTextRange - 0));
-    bottomClassificationText.setAttribute('y', trapezoidBottom - 10);
+    const trapezoidPoints = points[1];
+    setPoints(bottomShape, trapezoidPoints);
+    const trapPoss = getTextPositions(trapezoidPoints[0].y, trapezoidPoints[2].y, .5);
+    bottomCountText.setAttribute('y',          trapPoss.countY);
+    bottomClassificationText.setAttribute('y', trapPoss.classificationY);
+}
+
+function getTextPositions(top, bottom, factor) {
+    const countHeight = 60;
+    const classificationHeight = 15;
+    const height = bottom - top;
+    const countRange = height - 40 - countHeight;
+    return { 
+        countY:          top + countHeight + factor * countRange,
+        classificationY: bottom - classificationHeight
+    };
 }
 
 function setPoints(polygon, points) {
