@@ -2,10 +2,10 @@ export function getPoints(topCount, bottomCount) {
     // TODO Implement here
     return [
         [
-            { x: 170, y: 265  },
+            
             { x: 23, y: 40 },
-            { x: -150, y: 250 },
-            { x: 50, y: 265  }
+            { x: -150, y: 40 },
+            { x: 50, y: 40  }
         ],
         [
             { x: -50, y: 280 },

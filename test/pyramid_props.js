@@ -5,11 +5,29 @@ const pyramid = esmRequire('../pyramid.js')
 const { getPoints } = pyramid
 
 describe('The triangle on top', () => {
-    // it('should have 3 vertices', () => {
-    //     assertTrianglePoints(trianglePoints => {
-    //         return trianglePoints.length === 3;
-    //     });
-    // });
+    it('should have 3 vertices', () => {
+        assertTrianglePoints(trianglePoints => {
+            return trianglePoints.length === 3;
+        });
+    });
+    it('should have a level base',()=>{
+        assertTrianglePoints(trianglePoints => {
+            return (trianglePoints[0].y === trianglePoints[1].y ||
+                trianglePoints[1].y === trianglePoints[2].y ||
+                trianglePoints[0].y === trianglePoints[2].y);     
+        });
+    });
+    it('should have its tip at index 0', () => {
+        assertTrianglePoints(trianglePoints => {
+            const tip = trianglePoints[0];
+            return (tip.y >= trianglePoints[1].y &&
+                    tip.y >= trianglePoints[2].y);
+        });
+    });
+
+
+
+
     // it('should be isosceles', () => {
     //     assertTrianglePoints(trianglePoints => {
     //         const tip = trianglePoints[0];
