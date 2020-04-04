@@ -24,6 +24,10 @@ const bottomCountText = bottomPart.getElementsByClassName('test-count')[0];
 const bottomClassificationText = bottomPart.getElementsByClassName('test-classification')[0];
 const bottomShape = bottomPart.getElementsByTagName('polygon')[0];
 
+const shapes = [topShape, bottomShape];
+const countTexts = [topCountText, bottomCountText];
+const classificationTexts = [topClassificationText, bottomClassificationText];
+
 function wire() {
     classification1Text.oninput = updateCaptions;
     classification2Text.oninput = updateCaptions;
@@ -37,8 +41,8 @@ function wire() {
 }
 
 function updateCaptions() {
-    topClassificationText.textContent = classification1Text.value;
-    bottomClassificationText.textContent = classification2Text.value;
+    classificationTexts[0].textContent = classification1Text.value;
+    classificationTexts[1].textContent = classification2Text.value;
 }
 
 function redraw() {
@@ -49,8 +53,8 @@ function redraw() {
     const height = parseInt(optionHeightText.value);
     const width = parseInt(optionWidthText.value);
 
-    topCountText.textContent = topCount;
-    bottomCountText.textContent = bottomCount;
+    countTexts[0].textContent = topCount;
+    countTexts[1].textContent = bottomCount;
 
     updatePyramid(topCount, bottomCount, {top, height, width});
 }
@@ -59,16 +63,16 @@ function updatePyramid(topCount, bottomCount, options) {
     const points = pyramid.getPoints([topCount, bottomCount], options);
 
     const trianglePoints = points[0];
-    setPoints(topShape, trianglePoints);
+    setPoints(shapes[0], trianglePoints);
     const triPoss = getTextPositions(trianglePoints[0].y, trianglePoints[1].y, .8);
-    topCountText.setAttribute('y',          triPoss.countY);
-    topClassificationText.setAttribute('y', triPoss.classificationY);
+    countTexts[0].setAttribute('y',          triPoss.countY);
+    classificationTexts[0].setAttribute('y', triPoss.classificationY);
 
     const trapezoidPoints = points[1];
-    setPoints(bottomShape, trapezoidPoints);
+    setPoints(shapes[1], trapezoidPoints);
     const trapPoss = getTextPositions(trapezoidPoints[0].y, trapezoidPoints[2].y, .5);
-    bottomCountText.setAttribute('y',          trapPoss.countY);
-    bottomClassificationText.setAttribute('y', trapPoss.classificationY);
+    countTexts[1].setAttribute('y',          trapPoss.countY);
+    classificationTexts[1].setAttribute('y', trapPoss.classificationY);
 }
 
 function getTextPositions(top, bottom, factor) {
