@@ -1,4 +1,8 @@
-export function getPoints(topCount, bottomCount, options) {
+export function getPoints(counts, options) {
+    return getPointsForTwoParts(counts[0], counts[1], options);
+}
+
+function getPointsForTwoParts(topCount, bottomCount, options) {
     const f = Math.sqrt(topCount / (topCount + bottomCount));
 
     const top = options.top;

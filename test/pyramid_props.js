@@ -178,7 +178,7 @@ const assertPyramidPoints = assertion => {
             fc.integer(1, 400),
             (n1, n2, top, height, width) => {
                 const options = { top, height, width };
-                const points = getPoints(n1, n2, options);
+                const points = getPoints([n1, n2], options);
 
                 const inputs = { n1, n2, top, height, width };
                 return assertion(points, inputs);
