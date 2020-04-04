@@ -5,15 +5,20 @@ export function startup() {
     redraw();
 }
 
-const count1Text = document.getElementById('number-1');
-const count2Text = document.getElementById('number-2');
-const classification1Text = document.getElementById('classification-1');
-const classification2Text = document.getElementById('classification-2');
+// Form controls
+const count1Input = document.getElementById('number-1');
+const count2Input = document.getElementById('number-2');
+const classification1Input = document.getElementById('classification-1');
+const classification2Input = document.getElementById('classification-2');
 
-const optionTopText = document.getElementById('option-top');
-const optionHeightText = document.getElementById('option-height');
-const optionWidthText = document.getElementById('option-width');
+const optionTopInput = document.getElementById('option-top');
+const optionHeightInput = document.getElementById('option-height');
+const optionWidthInput = document.getElementById('option-width');
 
+const countInputs = [count1Input, count2Input];
+const classificationInputs = [classification1Input, classification2Input];
+
+// Graphics elements
 const topPart = document.getElementById('part-top');
 const topCountText = topPart.getElementsByClassName('test-count')[0];
 const topClassificationText = topPart.getElementsByClassName('test-classification')[0];
@@ -24,55 +29,54 @@ const bottomCountText = bottomPart.getElementsByClassName('test-count')[0];
 const bottomClassificationText = bottomPart.getElementsByClassName('test-classification')[0];
 const bottomShape = bottomPart.getElementsByTagName('polygon')[0];
 
-const shapes = [topShape, bottomShape];
+const polygons = [topShape, bottomShape];
 const countTexts = [topCountText, bottomCountText];
 const classificationTexts = [topClassificationText, bottomClassificationText];
 
 function wire() {
-    classification1Text.oninput = updateCaptions;
-    classification2Text.oninput = updateCaptions;
+    classificationInputs[0].oninput = updateCaptions;
+    classificationInputs[1].oninput = updateCaptions;
 
-    count1Text.onchange = redraw;
-    count2Text.onchange = redraw;
+    countInputs[0].onchange = redraw;
+    countInputs[1].onchange = redraw;
 
-    optionTopText.onchange = redraw;
-    optionHeightText.onchange = redraw;
-    optionWidthText.onchange = redraw;
+    optionTopInput.onchange = redraw;
+    optionHeightInput.onchange = redraw;
+    optionWidthInput.onchange = redraw;
 }
 
 function updateCaptions() {
-    classificationTexts[0].textContent = classification1Text.value;
-    classificationTexts[1].textContent = classification2Text.value;
+    classificationTexts[0].textContent = classificationInputs[0].value;
+    classificationTexts[1].textContent = classificationInputs[1].value;
 }
 
 function redraw() {
-    const topCount = parseInt(count1Text.value);
-    const bottomCount = parseInt(count2Text.value);
+    const count1 = parseInt(countInputs[0].value);
+    const count2 = parseInt(countInputs[1].value);
 
-    const top = parseInt(optionTopText.value);
-    const height = parseInt(optionHeightText.value);
-    const width = parseInt(optionWidthText.value);
+    const top = parseInt(optionTopInput.value);
+    const height = parseInt(optionHeightInput.value);
+    const width = parseInt(optionWidthInput.value);
 
-    countTexts[0].textContent = topCount;
-    countTexts[1].textContent = bottomCount;
+    countTexts[0].textContent = count1;
+    countTexts[1].textContent = count2;
 
-    updatePyramid(topCount, bottomCount, {top, height, width});
+    updatePyramid(count1, count2, {top, height, width});
 }
 
-function updatePyramid(topCount, bottomCount, options) {
-    const points = pyramid.getPoints([topCount, bottomCount], options);
+function updatePyramid(count1, count2, options) {
+    const points = pyramid.getPoints([count1, count2], options);
 
-    const trianglePoints = points[0];
-    setPoints(shapes[0], trianglePoints);
-    const triPoss = getTextPositions(trianglePoints[0].y, trianglePoints[1].y, .8);
-    countTexts[0].setAttribute('y',          triPoss.countY);
-    classificationTexts[0].setAttribute('y', triPoss.classificationY);
+    updateShape(points, 0, .8);
+    updateShape(points, 1, .5);
+}
 
-    const trapezoidPoints = points[1];
-    setPoints(shapes[1], trapezoidPoints);
-    const trapPoss = getTextPositions(trapezoidPoints[0].y, trapezoidPoints[2].y, .5);
-    countTexts[1].setAttribute('y',          trapPoss.countY);
-    classificationTexts[1].setAttribute('y', trapPoss.classificationY);
+function updateShape(points, idx, heightFactor) {
+    const shapePoints = points[idx];
+    setPoints(polygons[idx], shapePoints);
+    const positions = getTextPositions(shapePoints[0].y, shapePoints[2].y, heightFactor);
+    countTexts[idx].setAttribute('y', positions.countY);
+    classificationTexts[idx].setAttribute('y', positions.classificationY);
 }
 
 function getTextPositions(top, bottom, factor) {
