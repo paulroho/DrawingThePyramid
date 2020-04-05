@@ -4,6 +4,20 @@ const esmRequire = require('esm')(module)
 const pyramid = esmRequire('../pyramid.js')
 const { getPoints } = pyramid
 
+describe('getPoints', () => {
+    it('should return the same number of elements as counts provided', () => {
+        fc.assert(
+            fc.property(
+                fc.array(fc.nat().map(i => i+1), 1, 5), (counts) => {
+                    const someConfig = {top:0, width:100, height:100};
+                    const points = pyramid.getPoints(counts, someConfig);
+                    points.should.have.lengthOf(counts.length);
+                }
+            )
+        );
+    });
+});
+
 describe('The triangle on top', () => {
     it('should have 3 vertices', () => {
         assertTrianglePoints(trianglePoints => {
