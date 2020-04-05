@@ -103,11 +103,11 @@ describe('The trapezoid at the base', () => {
 describe('The triangle and the trapezoid', () => {
     it('should be perfectly stacked', () => {
         assertPyramidPoints(points => {
-            const trianglePoints = points[0];
+            const trianglePoints = points[1];
             const triangleBottomLeft = trianglePoints[1];
             const triangleBottomRight = trianglePoints[2];
 
-            const trapezoidPoints = points[1];
+            const trapezoidPoints = points[0];
             const trapezoidTopLeft = trapezoidPoints[0];
             const trapezoidTopRight = trapezoidPoints[1];
 
@@ -117,19 +117,19 @@ describe('The triangle and the trapezoid', () => {
     });
     it('should have the same slant', () => {
         assertPyramidPoints(points => {
-            const trianglePoints = points[0];
+            const trianglePoints = points[1];
             const triangleTip = trianglePoints[0];
             const triangleBottomRight = trianglePoints[2];
             const triangleHeight = triangleBottomRight.y - triangleTip.y;
             const triangleDeltaX = triangleBottomRight.x - triangleTip.x;
 
-            const trapezoidPoints = points[1];
+            const trapezoidPoints = points[0];
             const trapezoidTopRight = trapezoidPoints[1];
             const trapezoidBottomRight = trapezoidPoints[2];
             const trapezoidHeight = trapezoidBottomRight.y - trapezoidTopRight.y;
             const trapezoidDeltaX = trapezoidBottomRight.x - trapezoidTopRight.x;
 
-            if (trapezoidHeight > 0) {
+            if (triangleHeight > 0) {
                 const triangleSlant = triangleHeight / triangleDeltaX;
                 const trapezoidSlant = trapezoidHeight / trapezoidDeltaX;
                 trapezoidSlant.should.be.closeTo(triangleSlant, 2e-4);
@@ -138,14 +138,14 @@ describe('The triangle and the trapezoid', () => {
     });
     it('should have areas reflecting the two numbers given', () => {
         assertPyramidPoints((points, inputs) => {
-            const trianglePoints = points[0];
+            const trianglePoints = points[1];
             const triangleArea = calculatePolygonArea(trianglePoints);
 
-            const trapezoidPoints = points[1];
+            const trapezoidPoints = points[0];
             const trapezoidArea = calculatePolygonArea(trapezoidPoints);
 
-            const numberRatio = inputs.n2 / inputs.n1;
-            const areaRatio = trapezoidArea / triangleArea; 
+            const numberRatio = inputs.n1 / inputs.n0;
+            const areaRatio = triangleArea / trapezoidArea; 
 
             if (numberRatio === 0) {
                 areaRatio.should.be.equal(0);
@@ -157,10 +157,10 @@ describe('The triangle and the trapezoid', () => {
     });
     it('should have a total vertical extent according to option "height"', () => {
         assertPyramidPoints((points, inputs) => {
-            const trianglePoints = points[0];
+            const trianglePoints = points[1];
             const tip = trianglePoints[0];
 
-            const trapezoidPoints = points[1];
+            const trapezoidPoints = points[0];
             const bottom = trapezoidPoints[3];
 
             const height = bottom.y - tip.y;
@@ -175,11 +175,11 @@ const pointsAreEqual = (p1, p2) => {
 };
 
 const assertTrianglePoints = assertion => {
-    return assertPyramidPoints((points, inputs) => assertion(points[0], inputs));
+    return assertPyramidPoints((points, inputs) => assertion(points[1], inputs));
 };
 
 const assertTrapezoidPoints = assertion => {
-    return assertPyramidPoints((points, inputs) => assertion(points[1], inputs));
+    return assertPyramidPoints((points, inputs) => assertion(points[0], inputs));
 };
 
 const assertPyramidPoints = assertion => {
@@ -190,15 +190,16 @@ const assertPyramidPoints = assertion => {
             fc.integer(0, 400),
             fc.integer(1, 400),
             fc.integer(1, 400),
-            (n1, n2, top, height, width) => {
+            (n0, n1, top, height, width) => {
                 const options = { top, height, width };
-                const points = getPoints([n1, n2], options);
+                const points = getPoints([n0, n1], options);
 
-                const inputs = { n1, n2, top, height, width };
+                const inputs = { n0, n1, top, height, width };
                 return assertion(points, inputs);
             }
         )
-        ,{verbose: true}
+        //, { seed: 600009183, path: "4:0:0:0:0", endOnFailure: true }
+        // ,{verbose: true}
     );
 };
 

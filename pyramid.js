@@ -16,7 +16,7 @@ export function getPoints(counts, options) {
     return twoPartPoints;
 }
 
-function getPointsForTwoParts(topCount, bottomCount, options) {
+function getPointsForTwoParts(bottomCount, topCount, options) {
     const f = Math.sqrt(topCount / (topCount + bottomCount));
 
     const top = options.top;
@@ -28,15 +28,15 @@ function getPointsForTwoParts(topCount, bottomCount, options) {
 
     return [
         [
-            { x: 0,      y: top },
-            { x: -c / 2, y: top + n },
-            { x: +c / 2, y: top + n }
-        ],
-        [
             { x: -c / 2,     y: top + n },
             { x: +c / 2,     y: top + n },
             { x: +width / 2, y: top + height },
             { x: -width / 2, y: top + height }
+        ],
+        [
+            { x: 0,      y: top },
+            { x: -c / 2, y: top + n },
+            { x: +c / 2, y: top + n }
         ]
     ];
 }

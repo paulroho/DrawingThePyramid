@@ -7,31 +7,31 @@ export function startup() {
 
 // Form controls
 const count1Input = document.getElementById('number-1');
-const count2Input = document.getElementById('number-2');
+const count0Input = document.getElementById('number-0');
 const classification1Input = document.getElementById('classification-1');
-const classification2Input = document.getElementById('classification-2');
+const classification0Input = document.getElementById('classification-0');
 
 const optionTopInput = document.getElementById('option-top');
 const optionHeightInput = document.getElementById('option-height');
 const optionWidthInput = document.getElementById('option-width');
 
-const countInputs = [count1Input, count2Input];
-const classificationInputs = [classification1Input, classification2Input];
+const countInputs = [count0Input, count1Input];
+const classificationInputs = [classification0Input, classification1Input];
 
 // Graphics elements
-const topPart = document.getElementById('part-top');
-const topCountText = topPart.getElementsByClassName('test-count')[0];
-const topClassificationText = topPart.getElementsByClassName('test-classification')[0];
-const topShape = topPart.getElementsByTagName('polygon')[0];
+const shape1 = document.getElementById('shape-1');
+const countText1 = shape1.getElementsByClassName('test-count')[0];
+const classificationText1 = shape1.getElementsByClassName('test-classification')[0];
+const polygon1 = shape1.getElementsByTagName('polygon')[0];
 
-const bottomPart = document.getElementById('part-bottom');
-const bottomCountText = bottomPart.getElementsByClassName('test-count')[0];
-const bottomClassificationText = bottomPart.getElementsByClassName('test-classification')[0];
-const bottomShape = bottomPart.getElementsByTagName('polygon')[0];
+const shape0 = document.getElementById('shape-0');
+const countText0 = shape0.getElementsByClassName('test-count')[0];
+const classificationText0 = shape0.getElementsByClassName('test-classification')[0];
+const polygon0 = shape0.getElementsByTagName('polygon')[0];
 
-const polygons = [topShape, bottomShape];
-const countTexts = [topCountText, bottomCountText];
-const classificationTexts = [topClassificationText, bottomClassificationText];
+const polygons = [polygon0, polygon1];
+const countTexts = [countText0, countText1];
+const classificationTexts = [classificationText0, classificationText1];
 
 function wire() {
     classificationInputs[0].oninput = updateCaptions;
@@ -51,24 +51,24 @@ function updateCaptions() {
 }
 
 function redraw() {
-    const count1 = parseInt(countInputs[0].value);
-    const count2 = parseInt(countInputs[1].value);
+    const count0 = parseInt(countInputs[0].value);
+    const count1 = parseInt(countInputs[1].value);
 
     const top = parseInt(optionTopInput.value);
     const height = parseInt(optionHeightInput.value);
     const width = parseInt(optionWidthInput.value);
 
-    countTexts[0].textContent = count1;
-    countTexts[1].textContent = count2;
+    countTexts[0].textContent = count0;
+    countTexts[1].textContent = count1;
 
-    updatePyramid(count1, count2, {top, height, width});
+    updatePyramid(count0, count1, {top, height, width});
 }
 
-function updatePyramid(count1, count2, options) {
-    const points = pyramid.getPoints([count1, count2], options);
+function updatePyramid(count0, count1, options) {
+    const points = pyramid.getPoints([count0, count1], options);
 
-    updateShape(points, 0, .8);
-    updateShape(points, 1, .5);
+    updateShape(points, 0, .5);
+    updateShape(points, 1, .8);
 }
 
 function updateShape(points, idx, heightFactor) {
