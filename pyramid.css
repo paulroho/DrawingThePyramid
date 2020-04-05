@@ -44,9 +44,12 @@ input {
     stroke-width: 8px;
     stroke-linejoin: round;
 }
-.triangle {
+.pyramid g:nth-child(1) polygon {
+    fill:lightsteelblue;
+}
+.pyramid g:nth-child(2) polygon {
     fill:lightsalmon;
 }
-.trapezoid {
+.pyramid g:nth-child(3) polygon {
     fill:lightseagreen;
 }

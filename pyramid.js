@@ -11,7 +11,11 @@ export function getPoints(counts, options) {
         twoPartPoints.pop();
     }
     while (twoPartPoints.length < originalLength) {
-        twoPartPoints.push(0);
+        twoPartPoints.push([
+            { x: -100, y: 10 },
+            { x: 100, y: 150 },
+            { x: -100, y: 120 }
+        ]);
     }
     return twoPartPoints;
 }
@@ -28,13 +32,13 @@ function getPointsForTwoParts(bottomCount, topCount, options) {
 
     return [
         [
-            { x: -c / 2,     y: top + n },
-            { x: +c / 2,     y: top + n },
+            { x: -c / 2, y: top + n },
+            { x: +c / 2, y: top + n },
             { x: +width / 2, y: top + height },
             { x: -width / 2, y: top + height }
         ],
         [
-            { x: 0,      y: top },
+            { x: 0, y: top },
             { x: -c / 2, y: top + n },
             { x: +c / 2, y: top + n }
         ]
