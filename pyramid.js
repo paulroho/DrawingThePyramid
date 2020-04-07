@@ -12,6 +12,7 @@ export function getPoints(counts, options) {
     }
     while (twoPartPoints.length < originalLength) {
         twoPartPoints.push([
+            { x: -200, y: 50 },
             { x: -100, y: 10 },
             { x: 100, y: 150 },
             { x: -100, y: 120 }
@@ -38,6 +39,7 @@ function getPointsForTwoParts(bottomCount, topCount, options) {
             { x: -width / 2, y: top + height }
         ],
         [
+            { x: 0, y: top },
             { x: 0, y: top },
             { x: -c / 2, y: top + n },
             { x: +c / 2, y: top + n }

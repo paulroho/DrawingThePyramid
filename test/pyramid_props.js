@@ -16,18 +16,34 @@ describe('getPoints', () => {
             )
         );
     });
+    it('should return 4 elements in each slice', () => {
+        fc.assert(
+            fc.property(
+                fc.array(fc.nat().map(i => i+1), 1, 5), (counts) => {
+                    const someConfig = {top:0, width:100, height:100};
+                    const points = pyramid.getPoints(counts, someConfig);
+                    points.forEach(slice => {
+                        slice.should.have.lengthOf(4);
+                    });
+                }
+            )
+        );
+    });
 });
 
-describe('The triangle on top', () => {
-    it('should have 3 vertices', () => {
+describe('The trapezoid on top', () => {
+    it('should form a triangle', () => {
         assertTrianglePoints(trianglePoints => {
-            return trianglePoints.length === 3;
+            const topRight = trianglePoints[0];
+            const topLeft = trianglePoints[1];
+            
+            pointsAreEqual(topLeft, topRight).should.be.true;
         });
     });
     it('should have a horizontal base line', () => {
         assertTrianglePoints(trianglePoints => {
-            const bottomLeft = trianglePoints[1];
-            const bottomRight = trianglePoints[2];
+            const bottomLeft = trianglePoints[2];
+            const bottomRight = trianglePoints[3];
             
             return bottomLeft.y === bottomRight.y;
         });
@@ -35,8 +51,8 @@ describe('The triangle on top', () => {
     it('should be isosceles', () => {
         assertTrianglePoints(trianglePoints => {
             const tip = trianglePoints[0];
-            const bottomLeft = trianglePoints[1];
-            const bottomRight = trianglePoints[2];
+            const bottomLeft = trianglePoints[2];
+            const bottomRight = trianglePoints[3];
 
             const leftBase = tip.x - bottomLeft.x;
             const rightBase = bottomRight.x - tip.x;
@@ -54,12 +70,7 @@ describe('The triangle on top', () => {
 });
 
 describe('The trapezoid at the base', () => {
-    it('should have 4 vertices', () => {
-        assertTrapezoidPoints(trapezoidPoints => {
-            return trapezoidPoints.length === 4;
-        });
-    });
-    it('should have a horizontal top line', () => {
+    it('FOREACH SLICE (TODO): should have a horizontal top line', () => {
         assertTrapezoidPoints(trapezoidPoints => {
             const topLeft = trapezoidPoints[0];
             const topRight = trapezoidPoints[1];
@@ -67,7 +78,7 @@ describe('The trapezoid at the base', () => {
             return topLeft.y == topRight.y;
         });
     });
-    it('should have a horizontal bottom line', () => {
+    it('FOREACH SLICE (TODO): should have a horizontal bottom line', () => {
         assertTrapezoidPoints(trapezoidPoints => {
             const bottomRight = trapezoidPoints[2];
             const bottomLeft = trapezoidPoints[3];
@@ -75,7 +86,7 @@ describe('The trapezoid at the base', () => {
             return bottomRight.y == bottomLeft.y;
         });
     });
-    it('should be isosceles', () => {
+    it('FOREACH SLICE (TODO): should be isosceles', () => {
         assertTrapezoidPoints(trapezoidPoints => {
             const topLeft = trapezoidPoints[0];
             const topRight = trapezoidPoints[1];
@@ -100,12 +111,12 @@ describe('The trapezoid at the base', () => {
     });
 });
 
-describe('The triangle and the trapezoid', () => {
-    it('should be perfectly stacked', () => {
+describe('The two trapezoids', () => {
+    it('FOREACHBUTONE SLICE (TODO): should be perfectly stacked', () => {
         assertPyramidPoints(points => {
             const trianglePoints = points[1];
-            const triangleBottomLeft = trianglePoints[1];
-            const triangleBottomRight = trianglePoints[2];
+            const triangleBottomLeft = trianglePoints[2];
+            const triangleBottomRight = trianglePoints[3];
 
             const trapezoidPoints = points[0];
             const trapezoidTopLeft = trapezoidPoints[0];
@@ -115,11 +126,11 @@ describe('The triangle and the trapezoid', () => {
                    pointsAreEqual(triangleBottomRight, trapezoidTopRight);
         });
     });
-    it('should have the same slant', () => {
+    it('FOREACH SLICE (TODO): should have the same slant', () => {
         assertPyramidPoints(points => {
             const trianglePoints = points[1];
             const triangleTip = trianglePoints[0];
-            const triangleBottomRight = trianglePoints[2];
+            const triangleBottomRight = trianglePoints[3];
             const triangleHeight = triangleBottomRight.y - triangleTip.y;
             const triangleDeltaX = triangleBottomRight.x - triangleTip.x;
 
@@ -136,7 +147,7 @@ describe('The triangle and the trapezoid', () => {
             }
         });
     });
-    it('should have areas reflecting the two numbers given', () => {
+    it('FOREACH SLICE (TODO): should have areas reflecting the two numbers given', () => {
         assertPyramidPoints((points, inputs) => {
             const trianglePoints = points[1];
             const triangleArea = calculatePolygonArea(trianglePoints);
