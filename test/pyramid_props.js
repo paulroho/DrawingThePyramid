@@ -25,16 +25,16 @@ describe('Each slice', () => {
 describe('The trapezoid on top', () => {
     it('should form a triangle', () => {
         assertTrianglePoints(trianglePoints => {
-            const topRight = trianglePoints[0];
-            const topLeft = trianglePoints[1];
+            const topLeft = trianglePoints[0];
+            const topRight = trianglePoints[1];
             
             pointsAreEqual(topLeft, topRight).should.be.true;
         });
     });
     it('should have a horizontal base line', () => {
         assertTrianglePoints(trianglePoints => {
-            const bottomLeft = trianglePoints[2];
-            const bottomRight = trianglePoints[3];
+            const bottomRight = trianglePoints[2];
+            const bottomLeft = trianglePoints[3];
             
             return bottomLeft.y === bottomRight.y;
         });
@@ -42,8 +42,8 @@ describe('The trapezoid on top', () => {
     it('should be isosceles', () => {
         assertTrianglePoints(trianglePoints => {
             const tip = trianglePoints[0];
-            const bottomLeft = trianglePoints[2];
-            const bottomRight = trianglePoints[3];
+            const bottomRight = trianglePoints[2];
+            const bottomLeft = trianglePoints[3];
 
             const leftBase = tip.x - bottomLeft.x;
             const rightBase = bottomRight.x - tip.x;
@@ -106,8 +106,8 @@ describe('The two trapezoids', () => {
     it('FOREACHBUTONE SLICE (TODO): should be perfectly stacked', () => {
         assertPyramidPoints(points => {
             const trianglePoints = points[1];
-            const triangleBottomLeft = trianglePoints[2];
-            const triangleBottomRight = trianglePoints[3];
+            const triangleBottomRight = trianglePoints[2];
+            const triangleBottomLeft = trianglePoints[3];
 
             const trapezoidPoints = points[0];
             const trapezoidTopLeft = trapezoidPoints[0];
@@ -121,7 +121,7 @@ describe('The two trapezoids', () => {
         assertPyramidPoints(points => {
             const trianglePoints = points[1];
             const triangleTip = trianglePoints[0];
-            const triangleBottomRight = trianglePoints[3];
+            const triangleBottomRight = trianglePoints[2];
             const triangleHeight = triangleBottomRight.y - triangleTip.y;
             const triangleDeltaX = triangleBottomRight.x - triangleTip.x;
 

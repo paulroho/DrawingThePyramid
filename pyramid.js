@@ -41,8 +41,8 @@ function getPointsForTwoParts(bottomCount, topCount, options) {
         [
             { x: 0, y: top },
             { x: 0, y: top },
-            { x: -c / 2, y: top + n },
-            { x: +c / 2, y: top + n }
+            { x: +c / 2, y: top + n },
+            { x: -c / 2, y: top + n }
         ]
     ];
 }
