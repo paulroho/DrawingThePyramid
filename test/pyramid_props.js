@@ -20,6 +20,41 @@ describe('Each slice', () => {
             });
         });
     });
+    it('should have a horizontal top line', () => {
+        assertEachSlice((counts, slices) => {
+            slices.forEach(slice => {
+                const topLeft = slice[0];
+                const topRight = slice[1];
+
+                return topLeft.y == topRight.y;
+            });
+        });
+    });
+    it('should have a horizontal base line', () => {
+        assertEachSlice((counts, slices) => {
+            slices.forEach(slice => {
+                const bottomRight = slice[2];
+                const bottomLeft = slice[3];
+
+                return bottomRight.y == bottomLeft.y;
+            });
+        });
+    });
+    it('should be isosceles', () => {
+        assertEachSlice((counts, slices) => {
+            slices.forEach(slice => {
+                const topLeft = slice[0];
+                const topRight = slice[1];
+                const bottomRight = slice[2];
+                const bottomLeft = slice[3];
+
+                const leftBase = topLeft.x - bottomLeft.x;
+                const rightBase = bottomRight.x - topRight.x;
+
+                leftBase.should.be.closeTo(rightBase, 1e-6);
+            });
+        });
+    });
 });
 
 describe('The trapezoid on top', () => {
@@ -27,28 +62,8 @@ describe('The trapezoid on top', () => {
         assertTrianglePoints(trianglePoints => {
             const topLeft = trianglePoints[0];
             const topRight = trianglePoints[1];
-            
+
             pointsAreEqual(topLeft, topRight).should.be.true;
-        });
-    });
-    it('should have a horizontal base line', () => {
-        assertTrianglePoints(trianglePoints => {
-            const bottomRight = trianglePoints[2];
-            const bottomLeft = trianglePoints[3];
-            
-            return bottomLeft.y === bottomRight.y;
-        });
-    });
-    it('should be isosceles', () => {
-        assertTrianglePoints(trianglePoints => {
-            const tip = trianglePoints[0];
-            const bottomRight = trianglePoints[2];
-            const bottomLeft = trianglePoints[3];
-
-            const leftBase = tip.x - bottomLeft.x;
-            const rightBase = bottomRight.x - tip.x;
-
-            leftBase.should.be.closeTo(rightBase, 1e-6);
         });
     });
     it('should have its tip at the provided option "top"', () => {
@@ -61,35 +76,6 @@ describe('The trapezoid on top', () => {
 });
 
 describe('The trapezoid at the base', () => {
-    it('FOREACH SLICE (TODO): should have a horizontal top line', () => {
-        assertTrapezoidPoints(trapezoidPoints => {
-            const topLeft = trapezoidPoints[0];
-            const topRight = trapezoidPoints[1];
-
-            return topLeft.y == topRight.y;
-        });
-    });
-    it('FOREACH SLICE (TODO): should have a horizontal bottom line', () => {
-        assertTrapezoidPoints(trapezoidPoints => {
-            const bottomRight = trapezoidPoints[2];
-            const bottomLeft = trapezoidPoints[3];
-
-            return bottomRight.y == bottomLeft.y;
-        });
-    });
-    it('FOREACH SLICE (TODO): should be isosceles', () => {
-        assertTrapezoidPoints(trapezoidPoints => {
-            const topLeft = trapezoidPoints[0];
-            const topRight = trapezoidPoints[1];
-            const bottomRight = trapezoidPoints[2];
-            const bottomLeft = trapezoidPoints[3];
-
-            const leftBase = topLeft.x - bottomLeft.x;
-            const rightBase = bottomRight.x - topRight.x;
-
-            leftBase.should.be.closeTo(rightBase, 1e-6);
-        });
-    });
     it('should have a base with a width according to option "width"', () => {
         assertTrapezoidPoints((trapezoidPoints, inputs) => {
             const bottomRight = trapezoidPoints[2];
@@ -103,7 +89,7 @@ describe('The trapezoid at the base', () => {
 });
 
 describe('The two trapezoids', () => {
-    it('FOREACHBUTONE SLICE (TODO): should be perfectly stacked', () => {
+    it('FORALL SLICES (TODO): should be perfectly stacked', () => {
         assertPyramidPoints(points => {
             const trianglePoints = points[1];
             const triangleBottomRight = trianglePoints[2];
@@ -114,10 +100,10 @@ describe('The two trapezoids', () => {
             const trapezoidTopRight = trapezoidPoints[1];
 
             return pointsAreEqual(triangleBottomLeft, trapezoidTopLeft) &&
-                   pointsAreEqual(triangleBottomRight, trapezoidTopRight);
+                pointsAreEqual(triangleBottomRight, trapezoidTopRight);
         });
     });
-    it('FOREACH SLICE (TODO): should have the same slant', () => {
+    it('FORALL SLICES (TODO): should have the same slant', () => {
         assertPyramidPoints(points => {
             const trianglePoints = points[1];
             const triangleTip = trianglePoints[0];
@@ -138,7 +124,7 @@ describe('The two trapezoids', () => {
             }
         });
     });
-    it('FOREACH SLICE (TODO): should have areas reflecting the two numbers given', () => {
+    it('FORALL SLICES (TODO): should have areas reflecting the two numbers given', () => {
         assertPyramidPoints((points, inputs) => {
             const trianglePoints = points[1];
             const triangleArea = calculatePolygonArea(trianglePoints);
@@ -147,13 +133,13 @@ describe('The two trapezoids', () => {
             const trapezoidArea = calculatePolygonArea(trapezoidPoints);
 
             const numberRatio = inputs.n1 / inputs.n0;
-            const areaRatio = triangleArea / trapezoidArea; 
+            const areaRatio = triangleArea / trapezoidArea;
 
             if (numberRatio === 0) {
                 areaRatio.should.be.equal(0);
             }
             else {
-                (areaRatio/numberRatio).should.be.closeTo(1, 1e-4);
+                (areaRatio / numberRatio).should.be.closeTo(1, 1e-4);
             }
         });
     });
@@ -166,7 +152,7 @@ describe('The two trapezoids', () => {
             const bottom = trapezoidPoints[3];
 
             const height = bottom.y - tip.y;
-            
+
             height.should.be.equal(inputs.height);
         });
     });
@@ -187,8 +173,8 @@ const assertTrapezoidPoints = assertion => {
 const assertPyramidPoints = assertion => {
     return fc.assert(
         fc.property(
-            fc.nat().map(n => n + 1), 
-            fc.nat(), 
+            fc.nat().map(n => n + 1),
+            fc.nat(),
             fc.integer(0, 400),
             fc.integer(1, 400),
             fc.integer(1, 400),
@@ -208,12 +194,13 @@ const assertPyramidPoints = assertion => {
 const assertEachSlice = assertion => {
     return fc.assert(
         fc.property(
-            fc.array(fc.nat().map(i => i+1), 1, 5), (counts) => {
-                const someConfig = {top:0, width:100, height:100};
+            fc.array(fc.nat().map(i => i + 1), 1, 5), (counts) => {
+                const someConfig = { top: 0, width: 100, height: 100 };
                 const points = pyramid.getPoints(counts, someConfig);
                 assertion(counts, points);
             }
         )
+        , { seed: -962072222, path: "2:1:1:2:2", endOnFailure: true }
     );
 };
 

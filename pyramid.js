@@ -11,12 +11,7 @@ export function getPoints(counts, options) {
         twoPartPoints.pop();
     }
     while (twoPartPoints.length < originalLength) {
-        twoPartPoints.push([
-            { x: -200, y: 50 },
-            { x: -100, y: 10 },
-            { x: 100, y: 150 },
-            { x: -100, y: 120 }
-        ]);
+        twoPartPoints.push(twoPartPoints[0]);
     }
     return twoPartPoints;
 }
