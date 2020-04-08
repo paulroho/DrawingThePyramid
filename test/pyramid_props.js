@@ -6,31 +6,19 @@ const { getPoints } = pyramid
 
 describe('getPoints', () => {
     it('should return the same number of elements as counts provided', () => {
-        fc.assert(
-            fc.property(
-                fc.array(fc.nat().map(i => i+1), 1, 5), (counts) => {
-                    const someConfig = {top:0, width:100, height:100};
-                    const points = pyramid.getPoints(counts, someConfig);
-                    points.should.have.lengthOf(counts.length);
-                }
-            )
-        );
+        assertEachSlice((counts, slices) => {
+            slices.should.have.lengthOf(counts.length);
+        });
     });
 });
 
 describe('Each slice', () => {
     it('should have 4 vertices', () => {
-        fc.assert(
-            fc.property(
-                fc.array(fc.nat().map(i => i+1), 1, 5), (counts) => {
-                    const someConfig = {top:0, width:100, height:100};
-                    const points = pyramid.getPoints(counts, someConfig);
-                    points.forEach(slice => {
-                        slice.should.have.lengthOf(4);
-                    });
-                }
-            )
-        );
+        assertEachSlice((counts, slices) => {
+            slices.forEach(slice => {
+                slice.should.have.lengthOf(4);
+            });
+        });
     });
 });
 
@@ -214,6 +202,18 @@ const assertPyramidPoints = assertion => {
         )
         //, { seed: 600009183, path: "4:0:0:0:0", endOnFailure: true }
         // ,{verbose: true}
+    );
+};
+
+const assertEachSlice = assertion => {
+    return fc.assert(
+        fc.property(
+            fc.array(fc.nat().map(i => i+1), 1, 5), (counts) => {
+                const someConfig = {top:0, width:100, height:100};
+                const points = pyramid.getPoints(counts, someConfig);
+                assertion(counts, points);
+            }
+        )
     );
 };
 
