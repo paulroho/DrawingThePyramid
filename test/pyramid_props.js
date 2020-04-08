@@ -16,7 +16,10 @@ describe('getPoints', () => {
             )
         );
     });
-    it('should return 4 elements in each slice', () => {
+});
+
+describe('Each slice', () => {
+    it('should have 4 vertices', () => {
         fc.assert(
             fc.property(
                 fc.array(fc.nat().map(i => i+1), 1, 5), (counts) => {
