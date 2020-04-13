@@ -55,6 +55,28 @@ describe('Each slice', () => {
             });
         });
     });
+    it('should have an area proportional to the share of its count', () => {
+        assertEachSlice((slices, inputs) => {
+            const totalCount = inputs.counts.reduce((a, b) => a + b, 0);
+            const totalArea = inputs.width * inputs.height / 2;
+
+            for (let i=0; i<slices.length; i++) {
+                const slice = slices[i];
+                const count = inputs.counts[i];
+                const sliceArea = calculatePolygonArea(slice);
+
+                const countRatio = count/totalCount;
+                const areaRatio = sliceArea/totalArea;
+
+                if (countRatio === 0) {
+                    areaRatio.should.be.equal(0);
+                }
+                else {
+                    (areaRatio / countRatio).should.be.closeTo(1, 1e-4);
+                }
+            }
+        });
+    });
 });
 
 describe('The top trapezoid', () => {
@@ -97,30 +119,6 @@ describe('Neighbouring slices', () => {
                 const topNghbSlant = topNghbHeight / topNghbDeltaX;
                 const bottomNghbSlant = bottomNghbHeight / bottomNghbDeltaX;
                 bottomNghbSlant.should.be.closeTo(topNghbSlant, 2e-4);
-            }
-        });
-    });
-});
-
-describe('The two trapezoids', () => {
-    it('FORALL SLICES (TODO): should have areas reflecting the two numbers given', () => {
-        assertPyramidPoints((points, inputs) => {
-            const trianglePoints = points[1];
-            const triangleArea = calculatePolygonArea(trianglePoints);
-
-            const trapezoidPoints = points[0];
-            const trapezoidArea = calculatePolygonArea(trapezoidPoints);
-
-            const n0 = inputs.counts[0];
-            const n1 = inputs.counts[1];
-            const numberRatio = n1 / n0;
-            const areaRatio = triangleArea / trapezoidArea;
-
-            if (numberRatio === 0) {
-                areaRatio.should.be.equal(0);
-            }
-            else {
-                (areaRatio / numberRatio).should.be.closeTo(1, 1e-4);
             }
         });
     });
@@ -197,7 +195,7 @@ const assertEachSlice = assertion => {
                 return assertion(points, inputs);
             }
         )
-        //, { seed: 600009183, path: "4:0:0:0:0", endOnFailure: true }
+        // , { seed: 1709515677, path: "4:2:2:2:2:2:2", endOnFailure: true }
         // ,{verbose: true}
     );
 };
@@ -205,7 +203,7 @@ const assertEachSlice = assertion => {
 const assertNeighbouringSlices = assertion => {
     return fc.assert(
         fc.property(
-            fc.array(fc.nat(), 2, 2),
+            fc.array(fc.nat(), 1, 2),
             fc.integer(0, 400),
             fc.integer(1, 400),
             fc.integer(1, 400),
