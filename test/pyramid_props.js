@@ -126,7 +126,7 @@ describe('The two trapezoids', () => {
     });
 });
 
-describe('The final pyramid respects the provided options and therefore', () => {
+describe('The final pyramid (respects the provided options and therefore)', () => {
     it('should have its tip at the option "top"', () => {
         assertTopTrapezoid((trianglePoints, inputs) => {
             const tip = trianglePoints[0];
