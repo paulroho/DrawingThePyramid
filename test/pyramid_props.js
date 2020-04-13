@@ -57,9 +57,9 @@ describe('Each slice', () => {
     });
 });
 
-describe('The trapezoid on top', () => {
+describe('The top trapezoid', () => {
     it('should form a triangle', () => {
-        assertTrianglePoints(trianglePoints => {
+        assertTopTrapezoid(trianglePoints => {
             const topLeft = trianglePoints[0];
             const topRight = trianglePoints[1];
 
@@ -67,7 +67,7 @@ describe('The trapezoid on top', () => {
         });
     });
     it('should have its tip at the provided option "top"', () => {
-        assertTrianglePoints((trianglePoints, inputs) => {
+        assertTopTrapezoid((trianglePoints, inputs) => {
             const tip = trianglePoints[0];
 
             return tip.y === inputs.top;
@@ -75,9 +75,9 @@ describe('The trapezoid on top', () => {
     });
 });
 
-describe('The trapezoid at the base', () => {
+describe('The bottom trapezoid', () => {
     it('should have a base with a width according to option "width"', () => {
-        assertTrapezoidPoints((trapezoidPoints, inputs) => {
+        assertBottomTrapezoid((trapezoidPoints, inputs) => {
             const bottomRight = trapezoidPoints[2];
             const bottomLeft = trapezoidPoints[3];
 
@@ -132,7 +132,9 @@ describe('The two trapezoids', () => {
             const trapezoidPoints = points[0];
             const trapezoidArea = calculatePolygonArea(trapezoidPoints);
 
-            const numberRatio = inputs.n1 / inputs.n0;
+            const n0 = inputs.counts[0];
+            const n1 = inputs.counts[1];
+            const numberRatio = n1 / n0;
             const areaRatio = triangleArea / trapezoidArea;
 
             if (numberRatio === 0) {
@@ -162,27 +164,32 @@ const pointsAreEqual = (p1, p2) => {
     return p1.x === p2.x && p1.y === p2.y;
 };
 
-const assertTrianglePoints = assertion => {
-    return assertPyramidPoints((points, inputs) => assertion(points[1], inputs));
+const assertTopTrapezoid = assertion => {
+    return assertPyramidPoints((points, inputs) => {
+        const topIndex = inputs.counts.length - 1;
+        return assertion(points[topIndex], inputs);
+    });
 };
 
-const assertTrapezoidPoints = assertion => {
+const assertBottomTrapezoid = assertion => {
     return assertPyramidPoints((points, inputs) => assertion(points[0], inputs));
 };
 
 const assertPyramidPoints = assertion => {
     return fc.assert(
         fc.property(
-            fc.nat().map(n => n + 1),
-            fc.nat(),
+            fc.array(fc.nat(), 2, 2),
             fc.integer(0, 400),
             fc.integer(1, 400),
             fc.integer(1, 400),
-            (n0, n1, top, height, width) => {
+            (counts, top, height, width) => {
                 const options = { top, height, width };
-                const points = getPoints([n0, n1], options);
+                if (counts[0] === 0) {  // TODO: Just ensure that at least one of the elements is !== 0
+                    counts[0] = 1;
+                }
+                const points = getPoints(counts, options);
 
-                const inputs = { n0, n1, top, height, width };
+                const inputs = { counts, top, height, width };
                 return assertion(points, inputs);
             }
         )
@@ -200,7 +207,7 @@ const assertEachSlice = assertion => {
                 assertion(counts, points);
             }
         )
-        , { seed: -962072222, path: "2:1:1:2:2", endOnFailure: true }
+        // , { seed: -962072222, path: "2:1:1:2:2", endOnFailure: true }
     );
 };
 
