@@ -68,42 +68,41 @@ describe('The top trapezoid', () => {
     });
 });
 
-describe('The two trapezoids', () => {
-    it('FORALL SLICES (TODO): should be perfectly stacked', () => {
-        assertPyramidPoints(points => {
-            const trianglePoints = points[1];
-            const triangleBottomRight = trianglePoints[2];
-            const triangleBottomLeft = trianglePoints[3];
+describe('Neighbouring slices', () => {
+    it('should be perfectly stacked', () => {
+        assertNeighbouringSlices((bottomNghbPoints, topNghbPoints) => {
+            const topNghbBottomRight = topNghbPoints[2];
+            const topNghbBottomLeft = topNghbPoints[3];
 
-            const trapezoidPoints = points[0];
-            const trapezoidTopLeft = trapezoidPoints[0];
-            const trapezoidTopRight = trapezoidPoints[1];
+            const bottomNghbTopLeft = bottomNghbPoints[0];
+            const bottomNghbTopRight = bottomNghbPoints[1];
 
-            return pointsAreEqual(triangleBottomLeft, trapezoidTopLeft) &&
-                pointsAreEqual(triangleBottomRight, trapezoidTopRight);
+            return pointsAreEqual(topNghbBottomLeft, bottomNghbTopLeft) &&
+                   pointsAreEqual(topNghbBottomRight, bottomNghbTopRight);
         });
     });
-    it('FORALL SLICES (TODO): should have the same slant', () => {
-        assertPyramidPoints(points => {
-            const trianglePoints = points[1];
-            const triangleTip = trianglePoints[0];
-            const triangleBottomRight = trianglePoints[2];
-            const triangleHeight = triangleBottomRight.y - triangleTip.y;
-            const triangleDeltaX = triangleBottomRight.x - triangleTip.x;
+    it('should have the same slant', () => {
+        assertNeighbouringSlices((bottomNghbPoints, topNghbPoints) => {
+            const topNghbTopRight = topNghbPoints[1];
+            const topNghbBottomRight = topNghbPoints[2];
+            const topNghbDeltaX = topNghbBottomRight.x - topNghbTopRight.x;
+            const topNghbHeight = topNghbBottomRight.y - topNghbTopRight.y;
 
-            const trapezoidPoints = points[0];
-            const trapezoidTopRight = trapezoidPoints[1];
-            const trapezoidBottomRight = trapezoidPoints[2];
-            const trapezoidHeight = trapezoidBottomRight.y - trapezoidTopRight.y;
-            const trapezoidDeltaX = trapezoidBottomRight.x - trapezoidTopRight.x;
+            const bottomNghbTopRight = bottomNghbPoints[1];
+            const bottomNghbBottomRight = bottomNghbPoints[2];
+            const bottomNghbDeltaX = bottomNghbBottomRight.x - bottomNghbTopRight.x;
+            const bottomNghbHeight = bottomNghbBottomRight.y - bottomNghbTopRight.y;
 
-            if (triangleHeight > 0) {
-                const triangleSlant = triangleHeight / triangleDeltaX;
-                const trapezoidSlant = trapezoidHeight / trapezoidDeltaX;
-                trapezoidSlant.should.be.closeTo(triangleSlant, 2e-4);
+            if (topNghbHeight > 0) {
+                const topNghbSlant = topNghbHeight / topNghbDeltaX;
+                const bottomNghbSlant = bottomNghbHeight / bottomNghbDeltaX;
+                bottomNghbSlant.should.be.closeTo(topNghbSlant, 2e-4);
             }
         });
     });
+});
+
+describe('The two trapezoids', () => {
     it('FORALL SLICES (TODO): should have areas reflecting the two numbers given', () => {
         assertPyramidPoints((points, inputs) => {
             const trianglePoints = points[1];
@@ -200,6 +199,37 @@ const assertEachSlice = assertion => {
         )
         //, { seed: 600009183, path: "4:0:0:0:0", endOnFailure: true }
         // ,{verbose: true}
+    );
+};
+
+const assertNeighbouringSlices = assertion => {
+    return fc.assert(
+        fc.property(
+            fc.array(fc.nat(), 2, 2),
+            fc.integer(0, 400),
+            fc.integer(1, 400),
+            fc.integer(1, 400),
+            (counts, top, height, width) => {
+                const options = { top, height, width };
+                if (counts[0] === 0) {  // TODO: Just ensure that at least one of the elements is !== 0
+                    counts[0] = 1;
+                }
+                const points = getPoints(counts, options);
+
+                let assertionIsOk = true;
+                for (let i=0; i<counts.length-1; i++) {
+                    const bottomNghbPoints = points[i];
+                    const topNghbPoints = points[i+1];
+                    const bottomCount = counts[i];
+                    const topCount = counts[i+1];
+
+                    const isOk = assertion(bottomNghbPoints, topNghbPoints, bottomCount, topCount);
+                    assertionIsOk = assertionIsOk && isOk;
+                }
+
+                return assertionIsOk;
+            }
+        )
     );
 };
 
