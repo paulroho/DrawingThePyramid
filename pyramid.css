@@ -45,10 +45,10 @@ input {
     stroke-linejoin: round;
 }
 .pyramid g:nth-child(1) polygon {
-    fill:lightsteelblue;
+    fill:lightsalmon;
 }
 .pyramid g:nth-child(2) polygon {
-    fill:lightsalmon;
+    fill:lightsteelblue;
 }
 .pyramid g:nth-child(3) polygon {
     fill:lightseagreen;
