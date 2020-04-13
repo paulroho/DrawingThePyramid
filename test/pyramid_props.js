@@ -180,7 +180,7 @@ const assertPyramidPoints = assertion => {
 const assertEachSlice = assertion => {
     return fc.assert(
         fc.property(
-            fc.array(fc.nat(), 2, 2),
+            fc.array(fc.nat(), 1, 2),
             fc.integer(0, 400),
             fc.integer(1, 400),
             fc.integer(1, 400),

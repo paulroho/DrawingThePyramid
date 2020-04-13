@@ -1,9 +1,16 @@
 export function getPoints(counts, options) {
-    // Super hacky so far
-    const originalLength = counts.length;
-    if (originalLength === 1) {
-        counts = [counts[0], 0];
+    if (counts.length === 1) {
+        return [
+            [
+                { x: 0,                y: options.top },
+                { x: 0,                y: options.top },
+                { x: +options.width/2, y: options.top + options.height },
+                { x: -options.width/2, y: options.top + options.height }
+            ]
+        ];
     }
+
+    const originalLength = counts.length;
 
     const twoPartPoints = getPointsForTwoParts(counts[0], counts[1], options);
 
