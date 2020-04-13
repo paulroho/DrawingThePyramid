@@ -66,26 +66,6 @@ describe('The top trapezoid', () => {
             pointsAreEqual(topLeft, topRight).should.be.true;
         });
     });
-    it('should have its tip at the provided option "top"', () => {
-        assertTopTrapezoid((trianglePoints, inputs) => {
-            const tip = trianglePoints[0];
-
-            return tip.y === inputs.top;
-        });
-    });
-});
-
-describe('The bottom trapezoid', () => {
-    it('should have a base with a width according to option "width"', () => {
-        assertBottomTrapezoid((trapezoidPoints, inputs) => {
-            const bottomRight = trapezoidPoints[2];
-            const bottomLeft = trapezoidPoints[3];
-
-            const width = bottomRight.x - bottomLeft.x;
-
-            width.should.be.equal(inputs.width);
-        });
-    });
 });
 
 describe('The two trapezoids', () => {
@@ -145,17 +125,38 @@ describe('The two trapezoids', () => {
             }
         });
     });
-    it('should have a total vertical extent according to option "height"', () => {
-        assertPyramidPoints((points, inputs) => {
-            const trianglePoints = points[1];
+});
+
+describe('The final pyramid respects the provided options and therefore', () => {
+    it('should have its tip at the option "top"', () => {
+        assertTopTrapezoid((trianglePoints, inputs) => {
             const tip = trianglePoints[0];
 
-            const trapezoidPoints = points[0];
-            const bottom = trapezoidPoints[3];
+            return tip.y === inputs.top;
+        });
+    });
+    it('should have a total vertical extent according to option "height"', () => {
+        assertPyramidPoints((points, inputs) => {
+            const topIndex = inputs.counts.length - 1;
+            const topSlicePoints = points[topIndex];
+            const tip = topSlicePoints[0];
+
+            const bottomSlicePoints = points[0];
+            const bottom = bottomSlicePoints[3];
 
             const height = bottom.y - tip.y;
 
             height.should.be.equal(inputs.height);
+        });
+    });
+    it('should have a base with a width according to option "width"', () => {
+        assertBottomTrapezoid((trapezoidPoints, inputs) => {
+            const bottomRight = trapezoidPoints[2];
+            const bottomLeft = trapezoidPoints[3];
+
+            const width = bottomRight.x - bottomLeft.x;
+
+            width.should.be.equal(inputs.width);
         });
     });
 });
