@@ -57,7 +57,7 @@ describe('Each slice', () => {
     });
     it('should have an area proportional to the share of its count', () => {
         assertEachSlice((slices, inputs) => {
-            const totalCount = inputs.counts.reduce((a, b) => a + b, 0);
+            const totalCount = sum(inputs.counts);
             const totalArea = inputs.width * inputs.height / 2;
 
             for (let i=0; i<slices.length; i++) {
@@ -195,7 +195,7 @@ const assertEachSlice = assertion => {
                 return assertion(points, inputs);
             }
         )
-        // , { seed: 1709515677, path: "4:2:2:2:2:2:2", endOnFailure: true }
+        // , { seed: 1632958045, path: "0:1:0:0:0:0", endOnFailure: true }
         // ,{verbose: true}
     );
 };
@@ -246,3 +246,5 @@ const calculatePolygonArea = vertices => {
 
     return Math.abs(total);
 };
+
+let sum = arr => arr.reduce((a, b) => a + b, 0);

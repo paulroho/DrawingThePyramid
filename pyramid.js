@@ -2,25 +2,44 @@ export function getPoints(counts, options) {
     if (counts.length === 1) {
         return [
             [
-                { x: 0,                y: options.top },
-                { x: 0,                y: options.top },
-                { x: +options.width/2, y: options.top + options.height },
-                { x: -options.width/2, y: options.top + options.height }
+                { x: 0, y: options.top },
+                { x: 0, y: options.top },
+                { x: +options.width / 2, y: options.top + options.height },
+                { x: -options.width / 2, y: options.top + options.height }
             ]
         ];
     }
 
-    const originalLength = counts.length;
+    let slices = [];
 
-    const twoPartPoints = getPointsForTwoParts(counts[0], counts[1], options);
+    let i = 0;
+    let localWidth = options.width;
+    let localHeight = options.height;
+    let twoPartPoints;
 
-    while (twoPartPoints.length > originalLength) {
-        twoPartPoints.pop();
+    while (i < counts.length - 1) {
+        const bottomCount = counts[i];
+        const topCount = sum(counts.slice(i + 1, counts.length));
+        const localOptions = {
+            top: options.top,
+            width: localWidth,
+            height: localHeight
+        };
+        twoPartPoints = getPointsForTwoParts(bottomCount, topCount, localOptions);
+
+        const localBottomSlice = twoPartPoints[0];
+        slices.push(localBottomSlice);
+
+        localHeight -= (localBottomSlice[2].y - localBottomSlice[1].y);
+        localWidth = (localBottomSlice[1].x - localBottomSlice[0].x);
+
+        i++;
     }
-    while (twoPartPoints.length < originalLength) {
-        twoPartPoints.push(twoPartPoints[0]);
-    }
-    return twoPartPoints;
+
+    const topMostSlice = twoPartPoints[1];
+    slices.push(topMostSlice);
+
+    return slices;
 }
 
 function getPointsForTwoParts(bottomCount, topCount, options) {
@@ -48,3 +67,5 @@ function getPointsForTwoParts(bottomCount, topCount, options) {
         ]
     ];
 }
+
+let sum = arr => arr.reduce((a, b) => a + b, 0);
