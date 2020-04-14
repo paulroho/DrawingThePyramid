@@ -38,20 +38,20 @@ function calculateSlice(sliceCount, remainderCount, dimensions) {
     const width = dimensions.width;
     const height = dimensions.height;
 
-    const n = height * f;
-    const c = width * f;
+    const remainingHeight = height * f;
+    const remainingWidth = width * f;
 
     return {
         points: [
-            { x: -c / 2, y: top + n },
-            { x: +c / 2, y: top + n },
-            { x: +width / 2, y: top + height },
-            { x: -width / 2, y: top + height }
+            { x: -remainingWidth / 2, y: top + remainingHeight },
+            { x: +remainingWidth / 2, y: top + remainingHeight },
+            { x: +width / 2,          y: top + height },
+            { x: -width / 2,          y: top + height }
         ],
         remainderDimensions: {
-            width: width * f,
+            width: remainingWidth,
             top: top,
-            height: height * f
+            height: remainingHeight
         }
     };
 }
