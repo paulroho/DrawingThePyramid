@@ -1,42 +1,59 @@
 export function getPoints(counts, options) {
-    // Super hacky so far
-    const originalLength = counts.length;
-    if (originalLength === 1) {
-        counts = [counts[0], 0];
+    const slices = [];
+    let i = 0;
+
+    let remainderDimensions = {
+        top: options.top,
+        width: options.width,
+        height: options.height
+    };
+
+    while (i < counts.length - 1) {
+        const sliceCount = counts[i];
+        const remainderCount = sum(counts.slice(i + 1, counts.length));
+
+        const sliceInfo = calculateSlice(sliceCount, remainderCount, remainderDimensions);
+
+        slices.push(sliceInfo.points);
+        remainderDimensions = sliceInfo.remainderDimensions;
+
+        i++;
     }
 
-    const twoPartPoints = getPointsForTwoParts(counts[0], counts[1], options);
+    const topMostSlice = [
+        { x: 0, y: options.top },
+        { x: 0, y: options.top },
+        { x: +remainderDimensions.width / 2, y: options.top + remainderDimensions.height },
+        { x: -remainderDimensions.width / 2, y: options.top + remainderDimensions.height }
+    ];
+    slices.push(topMostSlice);
 
-    while (twoPartPoints.length > originalLength) {
-        twoPartPoints.pop();
-    }
-    while (twoPartPoints.length < originalLength) {
-        twoPartPoints.push(0);
-    }
-    return twoPartPoints;
+    return slices;
 }
 
-function getPointsForTwoParts(bottomCount, topCount, options) {
-    const f = Math.sqrt(topCount / (topCount + bottomCount));
+function calculateSlice(sliceCount, remainderCount, dimensions) {
+    const f = Math.sqrt(remainderCount / (remainderCount + sliceCount));
 
-    const top = options.top;
-    const width = options.width;
-    const height = options.height;
+    const top = dimensions.top;
+    const width = dimensions.width;
+    const height = dimensions.height;
 
     const n = height * f;
     const c = width * f;
 
-    return [
-        [
-            { x: -c / 2,     y: top + n },
-            { x: +c / 2,     y: top + n },
+    return {
+        points: [
+            { x: -c / 2, y: top + n },
+            { x: +c / 2, y: top + n },
             { x: +width / 2, y: top + height },
             { x: -width / 2, y: top + height }
         ],
-        [
-            { x: 0,      y: top },
-            { x: -c / 2, y: top + n },
-            { x: +c / 2, y: top + n }
-        ]
-    ];
+        remainderDimensions: {
+            width: width * f,
+            top: top,
+            height: height * f
+        }
+    };
 }
+
+let sum = arr => arr.reduce((a, b) => a + b, 0);
