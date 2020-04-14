@@ -92,6 +92,7 @@ describe('The top trapezoid', () => {
 
 describe('Neighbouring slices', () => {
     it('should be perfectly stacked', () => {
+        const eps = 1e-13;
         assertNeighbouringSlices((bottomNghbPoints, topNghbPoints) => {
             const topNghbBottomRight = topNghbPoints[2];
             const topNghbBottomLeft = topNghbPoints[3];
@@ -99,8 +100,8 @@ describe('Neighbouring slices', () => {
             const bottomNghbTopLeft = bottomNghbPoints[0];
             const bottomNghbTopRight = bottomNghbPoints[1];
 
-            return pointsAreEqual(topNghbBottomLeft, bottomNghbTopLeft) &&
-                   pointsAreEqual(topNghbBottomRight, bottomNghbTopRight);
+            return pointsAreEqual(topNghbBottomLeft, bottomNghbTopLeft, eps) &&
+                   pointsAreEqual(topNghbBottomRight, bottomNghbTopRight, eps);
         });
     });
     it('should have the same slant', () => {
@@ -158,8 +159,15 @@ describe('The final pyramid (respects the provided options and therefore)', () =
     });
 });
 
-const pointsAreEqual = (p1, p2) => {
-    return p1.x === p2.x && p1.y === p2.y;
+const pointsAreEqual = (p1, p2, eps) => {
+    if (typeof(eps) === 'undefined') {
+        eps = 0;
+    }
+
+    const xEq = Math.abs(p1.x - p2.x) <= eps;
+    const yEq = Math.abs(p1.y - p2.y) <= eps;
+
+    return xEq && yEq;
 };
 
 const assertTopTrapezoid = assertion => {
@@ -228,6 +236,7 @@ const assertNeighbouringSlices = assertion => {
                 return assertionIsOk;
             }
         )
+        // , { seed: -797397304, path: "6:2:0:0:0:1:0:0:0:0:0:0:0:0:0:0:0:0:0:0:1:0:0:0:1:6:2:3:6:4:6:9:5:2:5:3:10:18", endOnFailure: true }
     );
 };
 

@@ -1,21 +1,9 @@
 export function getPoints(counts, options) {
-    if (counts.length === 1) {
-        return [
-            [
-                { x: 0, y: options.top },
-                { x: 0, y: options.top },
-                { x: +options.width / 2, y: options.top + options.height },
-                { x: -options.width / 2, y: options.top + options.height }
-            ]
-        ];
-    }
-
     let slices = [];
-
     let i = 0;
+
     let localWidth = options.width;
     let localHeight = options.height;
-    let twoPartPoints;
 
     while (i < counts.length - 1) {
         const bottomCount = counts[i];
@@ -25,7 +13,7 @@ export function getPoints(counts, options) {
             width: localWidth,
             height: localHeight
         };
-        twoPartPoints = getPointsForTwoParts(bottomCount, topCount, localOptions);
+        const twoPartPoints = getPointsForTwoParts(bottomCount, topCount, localOptions);
 
         const localBottomSlice = twoPartPoints[0];
         slices.push(localBottomSlice);
@@ -36,7 +24,12 @@ export function getPoints(counts, options) {
         i++;
     }
 
-    const topMostSlice = twoPartPoints[1];
+    const topMostSlice = [
+        { x: 0, y: options.top },
+        { x: 0, y: options.top },
+        { x: +localWidth / 2, y: options.top + localHeight },
+        { x: -localWidth / 2, y: options.top + localHeight }
+    ];
     slices.push(topMostSlice);
 
     return slices;
