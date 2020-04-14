@@ -7,7 +7,7 @@ This project has two goals:
 * Provide an easy way to draw a test automation pyramid with proper proportions.
 * Provide a good example for doing property based testing in JavaScript using [fast-check](https://www.npmjs.com/package/fast-check).
 
-Watch live on [paulroho.github.io/DrawingThePyramid](https://paulroho.github.io/DrawingThePyramid).
+Watch live on [paulroho.com/DrawingThePyramid](https://paulroho.com/DrawingThePyramid).
 
 > For a concise introduction to Property based testing refer to the wonderful 15' talk [The Magic of Generative Testing: Fast-Check in JavaScript](https://www.youtube.com/watch?v=a2J_FSkxWKo) by [Gabriel Lebec](https://github.com/glebec).
 
