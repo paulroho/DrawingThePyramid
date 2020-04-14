@@ -1,25 +1,21 @@
 export function getPoints(counts, options) {
-    let slices = [];
+    const slices = [];
     let i = 0;
 
-    let localWidth = options.width;
-    let localHeight = options.height;
+    let remainderDimensions = {
+        top: options.top,
+        width: options.width,
+        height: options.height
+    };
 
     while (i < counts.length - 1) {
-        const bottomCount = counts[i];
-        const topCount = sum(counts.slice(i + 1, counts.length));
-        const localOptions = {
-            top: options.top,
-            width: localWidth,
-            height: localHeight
-        };
-        const twoPartPoints = getPointsForTwoParts(bottomCount, topCount, localOptions);
+        const sliceCount = counts[i];
+        const remainderCount = sum(counts.slice(i + 1, counts.length));
 
-        const localBottomSlice = twoPartPoints[0];
-        slices.push(localBottomSlice);
+        const sliceInfo = calculateSlice(sliceCount, remainderCount, remainderDimensions);
 
-        localHeight -= (localBottomSlice[2].y - localBottomSlice[1].y);
-        localWidth = (localBottomSlice[1].x - localBottomSlice[0].x);
+        slices.push(sliceInfo.points);
+        remainderDimensions = sliceInfo.remainderDimensions;
 
         i++;
     }
@@ -27,38 +23,37 @@ export function getPoints(counts, options) {
     const topMostSlice = [
         { x: 0, y: options.top },
         { x: 0, y: options.top },
-        { x: +localWidth / 2, y: options.top + localHeight },
-        { x: -localWidth / 2, y: options.top + localHeight }
+        { x: +remainderDimensions.width / 2, y: options.top + remainderDimensions.height },
+        { x: -remainderDimensions.width / 2, y: options.top + remainderDimensions.height }
     ];
     slices.push(topMostSlice);
 
     return slices;
 }
 
-function getPointsForTwoParts(bottomCount, topCount, options) {
-    const f = Math.sqrt(topCount / (topCount + bottomCount));
+function calculateSlice(sliceCount, remainderCount, dimensions) {
+    const f = Math.sqrt(remainderCount / (remainderCount + sliceCount));
 
-    const top = options.top;
-    const width = options.width;
-    const height = options.height;
+    const top = dimensions.top;
+    const width = dimensions.width;
+    const height = dimensions.height;
 
     const n = height * f;
     const c = width * f;
 
-    return [
-        [
+    return {
+        points: [
             { x: -c / 2, y: top + n },
             { x: +c / 2, y: top + n },
             { x: +width / 2, y: top + height },
             { x: -width / 2, y: top + height }
         ],
-        [
-            { x: 0, y: top },
-            { x: 0, y: top },
-            { x: +c / 2, y: top + n },
-            { x: -c / 2, y: top + n }
-        ]
-    ];
+        remainderDimensions: {
+            width: width * f,
+            top: top,
+            height: height * f
+        }
+    };
 }
 
 let sum = arr => arr.reduce((a, b) => a + b, 0);
