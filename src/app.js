@@ -104,6 +104,5 @@ function getTextPositions(top, bottom, factor) {
 }
 
 function setPoints(polygon, points) {
-    console.log(points);
     polygon.setAttribute('points', points.map(p => p.x + ',' + p.y).join(' '));
 }
