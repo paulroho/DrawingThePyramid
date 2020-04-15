@@ -4,6 +4,8 @@ const esmRequire = require('esm')(module)
 const pyramid = esmRequire('../pyramid.js')
 const { getPoints } = pyramid
 
+fc.configureGlobal({ numRuns: 1000 })
+
 describe('getPoints', () => {
     it('should return the same number of elements as counts provided', () => {
         assertEachSlice((slices, inputs) => {
@@ -72,7 +74,7 @@ describe('Each slice', () => {
                     areaRatio.should.be.equal(0);
                 }
                 else {
-                    (areaRatio / countRatio).should.be.closeTo(1, 1e-4);
+                    (areaRatio / countRatio).should.be.closeTo(1, 3e-4);
                 }
             }
         });
@@ -116,10 +118,10 @@ describe('Neighbouring slices', () => {
             const bottomNghbDeltaX = bottomNghbBottomRight.x - bottomNghbTopRight.x;
             const bottomNghbHeight = bottomNghbBottomRight.y - bottomNghbTopRight.y;
 
-            if (topNghbHeight > 0) {
+            if (bottomNghbHeight > 0 && topNghbHeight > 0) {
                 const topNghbSlant = topNghbHeight / topNghbDeltaX;
                 const bottomNghbSlant = bottomNghbHeight / bottomNghbDeltaX;
-                bottomNghbSlant.should.be.closeTo(topNghbSlant, 2e-4);
+                bottomNghbSlant.should.be.closeTo(topNghbSlant, 1e-3);
             }
         });
     });
@@ -188,7 +190,7 @@ const assertPyramidPoints = assertion => {
 const assertEachSlice = assertion => {
     return fc.assert(
         fc.property(
-            fc.array(fc.nat(), 1, 2),
+            fc.array(fc.nat(), 1, 5),
             fc.integer(0, 400),
             fc.integer(1, 400),
             fc.integer(1, 400),
@@ -203,6 +205,7 @@ const assertEachSlice = assertion => {
                 return assertion(points, inputs);
             }
         )
+        // , { seed: 1788453461, path: "1026:1:1:2:2:2", endOnFailure: true }
         // , { seed: 1632958045, path: "0:1:0:0:0:0", endOnFailure: true }
         // ,{verbose: true}
     );
@@ -211,7 +214,7 @@ const assertEachSlice = assertion => {
 const assertNeighbouringSlices = assertion => {
     return fc.assert(
         fc.property(
-            fc.array(fc.nat(), 1, 2),
+            fc.array(fc.nat(), 1, 5),
             fc.integer(0, 400),
             fc.integer(1, 400),
             fc.integer(1, 400),
@@ -236,7 +239,7 @@ const assertNeighbouringSlices = assertion => {
                 return assertionIsOk;
             }
         )
-        // , { seed: -797397304, path: "6:2:0:0:0:1:0:0:0:0:0:0:0:0:0:0:0:0:0:0:1:0:0:0:1:6:2:3:6:4:6:9:5:2:5:3:10:18", endOnFailure: true }
+        // , { seed: 2128176689, path: "32:5:3:3:4:3:4:3:3:3:3:5:3:4:3:3:3:3:3:3:3:3:3:4:5:7:3:4:6:3:4:5:6:4:5:6:4:4:6:4:3:5:3:3:3:3:10:8:1:1:2:5:5:9:4:10:17:4:4:2:4:3:2:14:16:18:20:21:23:31:16:17:10:14:17:10:14:16:17:10:3:4:14:15:19:20:22:24:59:60:61", endOnFailure: true }
     );
 };
 

@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "live-server --watch=.",
-    "test": "mocha --watch --colors"
+    "test": "mocha --watch --colors --timeout 10000"
   },
   "author": "Paul Rohorzka",
   "license": "ISC"
