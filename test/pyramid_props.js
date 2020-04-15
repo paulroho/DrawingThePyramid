@@ -225,18 +225,18 @@ const assertNeighbouringSlices = assertion => {
                 }
                 const slices = getSlices(counts, options);
 
-                let assertionIsOk = true;
+                let assertionsAreOk = true;
                 for (let i=0; i<counts.length-1; i++) {
                     const bottomNghbPoints = slices[i];
                     const topNghbPoints = slices[i+1];
                     const bottomCount = counts[i];
                     const topCount = counts[i+1];
 
-                    const isOk = assertion(bottomNghbPoints, topNghbPoints, bottomCount, topCount);
-                    assertionIsOk = assertionIsOk && isOk;
+                    const assertionIsOk = assertion(bottomNghbPoints, topNghbPoints, bottomCount, topCount);
+                    assertionsAreOk = assertionsAreOk && assertionIsOk;
                 }
 
-                return assertionIsOk;
+                return assertionsAreOk;
             }
         )
         // , { seed: 2128176689, path: "32:5:3:3:4:3:4:3:3:3:3:5:3:4:3:3:3:3:3:3:3:3:3:4:5:7:3:4:6:3:4:5:6:4:5:6:4:4:6:4:3:5:3:3:3:3:10:8:1:1:2:5:5:9:4:10:17:4:4:2:4:3:2:14:16:18:20:21:23:31:16:17:10:14:17:10:14:16:17:10:3:4:14:15:19:20:22:24:59:60:61", endOnFailure: true }
