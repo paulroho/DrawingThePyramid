@@ -77,15 +77,15 @@ function redraw() {
 }
 
 function updatePyramid(counts, options) {
-    const points = pyramid.getPoints(counts, options);
+    const slices = pyramid.getSlices(counts, options);
 
-    updateShape(points, 2, .8);
-    updateShape(points, 1, .8);
-    updateShape(points, 0, .5);
+    updateSlices(slices, 2, .8);
+    updateSlices(slices, 1, .8);
+    updateSlices(slices, 0, .5);
 }
 
-function updateShape(points, idx, heightFactor) {
-    const shapePoints = points[idx];
+function updateSlices(slices, idx, heightFactor) {
+    const shapePoints = slices[idx];
     setPoints(polygons[idx], shapePoints);
     const positions = getTextPositions(shapePoints[0].y, shapePoints[2].y, heightFactor);
     countTexts[idx].setAttribute('y', positions.countY);

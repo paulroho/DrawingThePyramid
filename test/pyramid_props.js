@@ -2,12 +2,12 @@ const fc = require('fast-check');
 const should = require('chai').should();
 const esmRequire = require('esm')(module)
 const pyramid = esmRequire('../pyramid.js')
-const { getPoints } = pyramid
+const { getSlices } = pyramid
 
 fc.configureGlobal({ numRuns: 1000 })
 
-describe('getPoints', () => {
-    it('should return the same number of elements as counts provided', () => {
+describe('getSlices', () => {
+    it('should return the same number of slices as counts provided', () => {
         assertEachSlice((slices, inputs) => {
             slices.should.have.lengthOf(inputs.counts.length);
         });
@@ -81,7 +81,7 @@ describe('Each slice', () => {
     });
 });
 
-describe('The top trapezoid', () => {
+describe('The top slice', () => {
     it('should form a triangle', () => {
         assertTopTrapezoid(trianglePoints => {
             const topLeft = trianglePoints[0];
@@ -199,10 +199,10 @@ const assertEachSlice = assertion => {
                 if (counts[0] === 0) {  // TODO: Just ensure that at least one of the elements is !== 0
                     counts[0] = 1;
                 }
-                const points = getPoints(counts, options);
+                const slices = getSlices(counts, options);
 
                 const inputs = { counts, top, height, width };
-                return assertion(points, inputs);
+                return assertion(slices, inputs);
             }
         )
         // , { seed: 1788453461, path: "1026:1:1:2:2:2", endOnFailure: true }
@@ -223,12 +223,12 @@ const assertNeighbouringSlices = assertion => {
                 if (counts[0] === 0) {  // TODO: Just ensure that at least one of the elements is !== 0
                     counts[0] = 1;
                 }
-                const points = getPoints(counts, options);
+                const slices = getSlices(counts, options);
 
                 let assertionIsOk = true;
                 for (let i=0; i<counts.length-1; i++) {
-                    const bottomNghbPoints = points[i];
-                    const topNghbPoints = points[i+1];
+                    const bottomNghbPoints = slices[i];
+                    const topNghbPoints = slices[i+1];
                     const bottomCount = counts[i];
                     const topCount = counts[i+1];
 

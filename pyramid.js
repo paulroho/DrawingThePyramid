@@ -1,4 +1,4 @@
-export function getPoints(counts, options) {
+export function getSlices(counts, options) {
     const slices = [];
     let i = 0;
 
