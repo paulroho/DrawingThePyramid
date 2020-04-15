@@ -61,7 +61,7 @@ This repo can work as the basis for a coding dojo learning the basics of propert
 
 ### Start with Branch DojoStart
 
-The branch [DojoStart](./tree/DojoStart) offers a starting point. A working setup of the code is in place, but its implementation is strikingly wrong:
+The branch [DojoStart](../../tree/DojoStart) offers a starting point. A working setup of the code is in place, but its implementation is strikingly wrong:
 
 ![An out of shape pyramid](/assets/DojoStartPyramid.png)
 
