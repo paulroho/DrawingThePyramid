@@ -32,7 +32,10 @@ export function getPoints(counts, options) {
 }
 
 function calculateSlice(sliceCount, remainderCount, dimensions) {
-    const f = Math.sqrt(remainderCount / (remainderCount + sliceCount));
+    let f = 1.0;
+    if (remainderCount + sliceCount > 0) {
+        f = Math.sqrt(remainderCount / (remainderCount + sliceCount));
+    }
 
     const top = dimensions.top;
     const width = dimensions.width;
