@@ -8,7 +8,7 @@ fc.configureGlobal({ numRuns: 1000 })
 
 describe('getSlices', () => {
     it('should return the same number of slices as counts provided', () => {
-        assertEachSlice((slices, inputs) => {
+        assertAllSlices((slices, inputs) => {
             slices.should.have.lengthOf(inputs.counts.length);
         });
     });
@@ -16,49 +16,41 @@ describe('getSlices', () => {
 
 describe('Each slice', () => {
     it('should have 4 vertices', () => {
-        assertEachSlice(slices => {
-            slices.forEach(slice => {
-                slice.should.have.lengthOf(4);
-            });
+        assertEachSlice(slice => {
+            slice.should.have.lengthOf(4);
         });
     });
     it('should have a horizontal top line', () => {
-        assertEachSlice(slices => {
-            slices.forEach(slice => {
-                const topLeft = slice[0];
-                const topRight = slice[1];
+        assertEachSlice(slice => {
+            const topLeft = slice[0];
+            const topRight = slice[1];
 
-                return topLeft.y == topRight.y;
-            });
+            return topLeft.y == topRight.y;
         });
     });
     it('should have a horizontal base line', () => {
-        assertEachSlice(slices => {
-            slices.forEach(slice => {
-                const bottomRight = slice[2];
-                const bottomLeft = slice[3];
+        assertEachSlice(slice => {
+            const bottomRight = slice[2];
+            const bottomLeft = slice[3];
 
-                return bottomRight.y == bottomLeft.y;
-            });
+            return bottomRight.y == bottomLeft.y;
         });
     });
     it('should be isosceles', () => {
-        assertEachSlice(slices => {
-            slices.forEach(slice => {
-                const topLeft = slice[0];
-                const topRight = slice[1];
-                const bottomRight = slice[2];
-                const bottomLeft = slice[3];
+        assertEachSlice(slice => {
+            const topLeft = slice[0];
+            const topRight = slice[1];
+            const bottomRight = slice[2];
+            const bottomLeft = slice[3];
 
-                const leftBase = topLeft.x - bottomLeft.x;
-                const rightBase = bottomRight.x - topRight.x;
+            const leftBase = topLeft.x - bottomLeft.x;
+            const rightBase = bottomRight.x - topRight.x;
 
-                leftBase.should.be.closeTo(rightBase, 1e-6);
-            });
+            leftBase.should.be.closeTo(rightBase, 1e-6);
         });
     });
     it('should have an area proportional to the share of its count', () => {
-        assertEachSlice((slices, inputs) => {
+        assertAllSlices((slices, inputs) => {
             const totalCount = sum(inputs.counts);
             const totalArea = inputs.width * inputs.height / 2;
 
@@ -184,10 +176,18 @@ const assertBottomTrapezoid = assertion => {
 };
 
 const assertPyramidPoints = assertion => {
-    return assertEachSlice(assertion);
+    return assertAllSlices(assertion);
 };
 
-const assertEachSlice = assertion => {
+const assertEachSlice = function(assertion) {
+    assertAllSlices(slices => {
+        slices.forEach(slice => {
+            assertion(slice);
+        });
+    });
+};
+
+const assertAllSlices = assertion => {
     return fc.assert(
         fc.property(
             fc.array(fc.nat(), 1, 5),
