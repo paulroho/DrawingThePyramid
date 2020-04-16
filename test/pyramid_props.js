@@ -1,7 +1,7 @@
 const fc = require('fast-check');
 const should = require('chai').should();
 const esmRequire = require('esm')(module)
-const pyramid = esmRequire('../pyramid.js')
+const pyramid = esmRequire('../src/pyramid.js')
 const { getSlices } = pyramid
 
 fc.configureGlobal({ numRuns: 1000 })
