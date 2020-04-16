@@ -128,12 +128,12 @@ describe('The final pyramid (respects the provided options and therefore)', () =
         });
     });
     it('should have a total vertical extent according to option "height"', () => {
-        assertPyramidPoints((points, inputs) => {
+        assertAllSlices((slices, inputs) => {
             const topIndex = inputs.counts.length - 1;
-            const topSlicePoints = points[topIndex];
+            const topSlicePoints = slices[topIndex];
             const tip = topSlicePoints[0];
 
-            const bottomSlicePoints = points[0];
+            const bottomSlicePoints = slices[0];
             const bottom = bottomSlicePoints[3];
 
             const height = bottom.y - tip.y;
@@ -165,18 +165,14 @@ const pointsAreEqual = (p1, p2, eps) => {
 };
 
 const assertTopTrapezoid = assertion => {
-    return assertPyramidPoints((points, inputs) => {
+    return assertAllSlices((slices, inputs) => {
         const topIndex = inputs.counts.length - 1;
-        return assertion(points[topIndex], inputs);
+        return assertion(slices[topIndex], inputs);
     });
 };
 
 const assertBottomTrapezoid = assertion => {
-    return assertPyramidPoints((points, inputs) => assertion(points[0], inputs));
-};
-
-const assertPyramidPoints = assertion => {
-    return assertAllSlices(assertion);
+    return assertAllSlices((slices, inputs) => assertion(slices[0], inputs));
 };
 
 const assertEachSlice = function(assertion) {
