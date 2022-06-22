@@ -5,6 +5,9 @@ const pyramid = esmRequire('../pyramid.js')
 const { getPoints } = pyramid
 
 describe('The triangle on top', () => {
+    // Assertions using Chai should style: https://www.chaijs.com/guide/styles/#should
+    // For all assertions: https://www.chaijs.com/api/bdd/
+
     // it('should have 3 vertices', () => {
     //     assertTrianglePoints(trianglePoints => {
     //         return trianglePoints.length === 3;
